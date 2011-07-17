@@ -1,0 +1,81 @@
+.TH BASE 1 "July 2011" "base 1.0.0" "User Commands"
+.SH NAME
+base \- base directory environment
+.SH SYNOPSIS
+.B base
+.RI [ label ]
+.PP
+.B bcd
+.RI [ path ]
+.br
+.B base_deactivate
+.SH DESCRIPTION
+.B base
+creates an environment with a base directory.  Execute \fBbase\fR from the
+base directory using "." at the beginning, so that it is executed within your
+current environment, as follows:
+.PP
+	\fB. base\fR [\fIlabel\fR]
+.PP
+If you do not use the "." then the command will have no (lasting) effect.  The
+\fBlabel\fR can be used to identify the environment.  If you do not specify
+one, then the name of the base directory is used.
+.PP
+The prompt and title of the terminal change according to what directory you
+are in.  When within the base directory, the label in brackets and the current
+path within the base directory are displayed.  For example, when in the
+\fIsrc\fR directory under a base environment labelled "app", the prompt would
+be displayed as follows:
+.PP
+	[app] /src$
+.PP
+When outside the base directory, the label in parenthesis and the current path
+are displayed.  For example, when in the \fI/etc\fR directory outside of a
+base environment labelled "app", the prompt would be displayed as follows:
+.PP
+	(app) /etc$
+.PP
+.B base
+adds two functions to your environment: \fBbcd\fR and \fBbase_deactivate\fR.
+.PP
+The \fBbcd\fR function changes to directories relative to the base directory.
+Similar to how the \fBcd\fR command changes to your HOME directory when no
+arguments are given, \fBbcd\fR changes to your base directory when no
+arguments are given.  Use the tab key to use auto-completion relative to the
+base directory.
+.PP
+The \fBbase_deactivate\fR function removes the effects of this script and
+restores previous settings.  Note that nested base environments are not
+supported.
+.SH AVAILABILITY
+This software is being pre-released on GitHub before the launch of the Yuzu
+Technology website:
+  https://github.com/yuzutechnology/base
+.SH AUTHOR
+Travis Cardwell <travis.cardwell@yuzutechnology.com>
+.SH REPORTING BUGS
+Please post bugs and feature requests to GitHub:
+  https://github.com/yuzutechnology/base/issues
+.PP
+If you do not have a GitHub account, feel free to write email to
+<bugs@yuzutechnology.com>.  General feedback is also welcome.
+.SH COPYRIGHT
+Copyright \(co 2011, Yuzu Technology
+.PP
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+.PP
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+.PP
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
