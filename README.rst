@@ -36,6 +36,10 @@ directory.
 The `base_deactivate` function removes the effects of this script and restores
 previous settings.  Note that nested base environments are not supported.
 
+Scripts named `.base.activate.sh` and `.base.deactivate.sh` in the base
+directory are sourced automatically when base is activated/deactivated, if
+they exist.
+
 Requirements
 ------------
 
