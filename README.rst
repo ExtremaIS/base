@@ -36,6 +36,10 @@ directory.
 The `base_deactivate` function removes the effects of this script and restores
 previous settings.  Note that nested base environments are not supported.
 
+Scripts named `.base.activate.sh` and `.base.deactivate.sh` in the base
+directory are sourced automatically when base is activated/deactivated, if
+they exist.
+
 Requirements
 ------------
 
@@ -80,7 +84,7 @@ If you do not have a GitHub account, feel free to write email to
 Copyright
 ---------
 
-Copyright (c) 2011, Yuzu Technology
+Copyright (c) 2011-2013, Yuzu Technology, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

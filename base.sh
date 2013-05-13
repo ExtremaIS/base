@@ -6,8 +6,8 @@
 #
 # Author: Travis Cardwell <travis.cardwell@yuzutechnology.com>
 # URL: http://www.yuzutechnology.com/products/base (coming soon)
-# Version: 1.0.0
-# Copyright (c) 2011, Yuzu Technology
+# Version: 1.0.1
+# Copyright (c) 2011-2013, Yuzu Technology, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -47,18 +47,22 @@
 ##############################################################################
 _base_ps_update () {
     local lpath suffix
-    if [ "$BASE" == "${PWD:0:${#BASE}}" ] ; then
-        lpath="[$BASE_LABEL] ${PWD:${#BASE}}"
-    elif [ "$HOME" == "${PWD:0:${#HOME}}" ] ; then
-        lpath="($BASE_LABEL) ~${PWD:${#HOME}}"
+    if [ "${BASE}" == "${PWD}" ] ; then
+        lpath="[${BASE_LABEL}] "
+    elif [ "${BASE}/" == "${PWD:0:$((${#BASE}+1))}" ] ; then
+        lpath="[${BASE_LABEL}] ${PWD:${#BASE}}"
+    elif [ "${HOME}" == "${PWD}" ] ; then
+        lpath="(${BASE_LABEL}) ~"
+    elif [ "${HOME}/" == "${PWD:0:$((${#HOME}+1))}" ] ; then
+        lpath="(${BASE_LABEL}) ~${PWD:${#HOME}}"
     else
-        lpath="($BASE_LABEL) $PWD"
+        lpath="(${BASE_LABEL}) ${PWD}"
     fi
     suffix="\$ "
-    if [ "$USER" == "root" ] ; then
+    if [ "${USER}" == "root" ] ; then
         suffix="# "
     fi
-    export PS1="\[\e]2;$lpath\a\]$lpath$suffix"
+    export PS1="\[\e]2;${lpath}\a\]${lpath}${suffix}"
 }
 
 ##############################################################################
@@ -75,17 +79,17 @@ _base_ps_update () {
 ##############################################################################
 _base_autocomplete () {
     local curr rest
-    curr="$BASE"
+    curr="${BASE}"
     rest="${2##*/}"
     if [ ${#2} -gt ${#rest} ] ; then
-        curr="$BASE/${2%/*}"
+        curr="${BASE}/${2%/*}"
     fi
-    COMPREPLY=( $( find "$curr" -mindepth 1 -maxdepth 1 -type d \
-                                -name "$rest*" \
-                 | sed "s#^$BASE/\(.*\)\$#\1/#" ) )
+    COMPREPLY=( $( find "${curr}" -mindepth 1 -maxdepth 1 -type d \
+                                  -name "${rest}*" \
+                 | sed "s#^${BASE}/\(.*\)\$#\1/#" ) )
     if [ ${#COMPREPLY[*]} -eq 1 ] ; then
-        COMPREPLY=( $( find "$BASE/${COMPREPLY[0]}" -maxdepth 1 -type d \
-                     | sed "s#^$BASE/\(.*\)\$#\1/#" ) )
+        COMPREPLY=( $( find "${BASE}/${COMPREPLY[0]}" -maxdepth 1 -type d \
+                     | sed "s#^${BASE}/\(.*\)\$#\1/#" ) )
         if [ ${#COMPREPLY[*]} -eq 1 ] ; then
             COMPREPLY=( ${COMPREPLY[0]%/} )
         fi
@@ -105,7 +109,7 @@ _base_autocomplete () {
 # This function is called directly from the command line.
 ##############################################################################
 bcd () {
-    cd "$BASE/$1"
+    cd "${BASE}/${1}"
 }
 
 ##############################################################################
@@ -122,19 +126,22 @@ bcd () {
 ##############################################################################
 base_deactivate () {
     unset PROMPT_COMMAND
-    export PS1="$BASE_OLD_PS1"
+    export PS1="${BASE_OLD_PS1}"
     unset BASE_OLD_PS1
-    if [ -n "$BASE_OLD_PROMPT_COMMAND" ] ; then
-        export PROMPT_COMMAND="$BASE_OLD_PROMPT_COMMAND"
+    if [ -n "${BASE_OLD_PROMPT_COMMAND}" ] ; then
+        export PROMPT_COMMAND="${BASE_OLD_PROMPT_COMMAND}"
         unset BASE_OLD_PROMPT_COMMAND
     fi
     complete -r bcd
-    unset BASE_LABEL
-    unset BASE
     unset -f _base_ps_update
     unset -f _base_autocomplete
     unset -f bcd
     unset -f base_deactivate
+    unset BASE_LABEL
+    if [ -f "${BASE}/.base.deactivate.sh" ] ; then
+        source "${BASE}/.base.deactivate.sh"
+    fi
+    unset BASE
 }
 
 ##############################################################################
@@ -145,21 +152,24 @@ base_deactivate () {
 #   * variables used by this script are set
 #   * autocompletion rules for bcd are added
 ##############################################################################
-if [[ "$#" -gt 1 || "$#" -eq 1 && "$1" == "--help" ]]; then
+if [[ "$#" -gt 1 || "$#" -eq 1 && "${1}" == "--help" ]]; then
     echo "Syntax: . base [label]" 1>&2
     echo "The \".\" at the beginning is required. " \
          "Type \"man base\" for details." 1>&2
 else
-    export BASE_OLD_PS1="$PS1"
-    if [ -n "$PROMPT_COMMAND" ] ; then
-        export BASE_OLD_PROMPT_COMMAND="$PROMPT_COMMAND"
+    if [ -f ".base.activate.sh" ] ; then
+        source ".base.activate.sh"
+    fi
+    export BASE_OLD_PS1="${PS1}"
+    if [ -n "${PROMPT_COMMAND}" ] ; then
+        export BASE_OLD_PROMPT_COMMAND="${PROMPT_COMMAND}"
     fi
     if [ "$#" -eq 1 ] ; then
-        export BASE_LABEL="$1"
+        export BASE_LABEL="${1}"
     else
         export BASE_LABEL="${PWD##*/}"
     fi
-    export BASE="$PWD"
+    export BASE="${PWD}"
     export PROMPT_COMMAND="_base_ps_update"
     complete -o filenames -F _base_autocomplete bcd
 fi

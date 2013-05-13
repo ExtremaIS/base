@@ -1,4 +1,4 @@
-.TH BASE 1 "July 2011" "base 1.0.0" "User Commands"
+.TH BASE 1 "May 2013" "base 1.0.1" "User Commands"
 .SH NAME
 base \- base directory environment
 .SH SYNOPSIS
@@ -47,6 +47,10 @@ base directory.
 The \fBbase_deactivate\fR function removes the effects of this script and
 restores previous settings.  Note that nested base environments are not
 supported.
+.PP
+Scripts named \fB.base.activate.sh\fR and \fB.base.deactivate.sh\fR in the
+base directory are sourced automatically when base is activated/deactivated,
+if they exist.
 .SH AVAILABILITY
 This software is being pre-released on GitHub before the launch of the Yuzu
 Technology website:
@@ -60,7 +64,7 @@ Please post bugs and feature requests to GitHub:
 If you do not have a GitHub account, feel free to write email to
 <bugs@yuzutechnology.com>.  General feedback is also welcome.
 .SH COPYRIGHT
-Copyright \(co 2011, Yuzu Technology
+Copyright \(co 2011-2013, Yuzu Technology, Inc.
 .PP
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
