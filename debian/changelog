@@ -1,3 +1,12 @@
+base (1.0.1) unstable; urgency=low
+
+  * fixed prefix bugs where base/home directory names are prefixes of other
+    directory names
+
+  * added .base.activate.sh and .base.deactivate.sh script sourcing
+
+ -- Travis Cardwell <travis.cardwell@yuzutechnology.com>  Mon, 13 May 2013 20:15:00 +0900
+
 base (1.0.0) unstable; urgency=low
 
   * Initial release
