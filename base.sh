@@ -47,7 +47,9 @@
 ##############################################################################
 _base_ps_update () {
     local lpath suffix
-    if [ "${BASE}" == "${PWD:0:${#BASE}}" ] ; then
+    if [ "${BASE}" == "${PWD}" ] ; then
+        lpath="[${BASE_LABEL}] "
+    elif [ "${BASE}/" == "${PWD:0:$((${#BASE}+1))}" ] ; then
         lpath="[${BASE_LABEL}] ${PWD:${#BASE}}"
     elif [ "${HOME}" == "${PWD:0:${#HOME}}" ] ; then
         lpath="(${BASE_LABEL}) ~${PWD:${#HOME}}"
