@@ -133,12 +133,15 @@ base_deactivate () {
         unset BASE_OLD_PROMPT_COMMAND
     fi
     complete -r bcd
-    unset BASE_LABEL
-    unset BASE
     unset -f _base_ps_update
     unset -f _base_autocomplete
     unset -f bcd
     unset -f base_deactivate
+    unset BASE_LABEL
+    if [ -f "${BASE}/.base.deactivate.sh" ] ; then
+        source "${BASE}/.base.deactivate.sh"
+    fi
+    unset BASE
 }
 
 ##############################################################################
@@ -154,6 +157,9 @@ if [[ "$#" -gt 1 || "$#" -eq 1 && "${1}" == "--help" ]]; then
     echo "The \".\" at the beginning is required. " \
          "Type \"man base\" for details." 1>&2
 else
+    if [ -f ".base.activate.sh" ] ; then
+        source ".base.activate.sh"
+    fi
     export BASE_OLD_PS1="${PS1}"
     if [ -n "${PROMPT_COMMAND}" ] ; then
         export BASE_OLD_PROMPT_COMMAND="${PROMPT_COMMAND}"
