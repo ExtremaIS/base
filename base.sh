@@ -7,7 +7,7 @@
 # Author: Travis Cardwell <travis.cardwell@yuzutechnology.com>
 # URL: http://www.yuzutechnology.com/products/base (coming soon)
 # Version: 1.0.0
-# Copyright (c) 2011, Yuzu Technology
+# Copyright (c) 2011, Yuzu Technology, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
