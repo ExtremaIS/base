@@ -1,7 +1,7 @@
 Format: http://dep.debian.net/deps/dep5/
-Upstream-Name: blink
+Upstream-Name: base
 Upstream-Contact: Travis Cardwell <travis.cardwell@yuzutechnology.com>
-Source: http://www.yuzutechnology.com/products/blink
+Source: http://www.yuzutechnology.com/products/base
 
 Files: *
 Copyright: Copyright (c) 2011, Yuzu Technology
