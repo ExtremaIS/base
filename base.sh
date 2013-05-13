@@ -51,7 +51,9 @@ _base_ps_update () {
         lpath="[${BASE_LABEL}] "
     elif [ "${BASE}/" == "${PWD:0:$((${#BASE}+1))}" ] ; then
         lpath="[${BASE_LABEL}] ${PWD:${#BASE}}"
-    elif [ "${HOME}" == "${PWD:0:${#HOME}}" ] ; then
+    elif [ "${HOME}" == "${PWD}" ] ; then
+        lpath="(${BASE_LABEL}) ~"
+    elif [ "${HOME}/" == "${PWD:0:$((${#HOME}+1))}" ] ; then
         lpath="(${BASE_LABEL}) ~${PWD:${#HOME}}"
     else
         lpath="(${BASE_LABEL}) ${PWD}"
