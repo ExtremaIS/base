@@ -152,7 +152,7 @@ base_deactivate () {
 #   * variables used by this script are set
 #   * autocompletion rules for bcd are added
 ##############################################################################
-if [[ "$#" -gt 1 || "$#" -eq 1 && "${1}" == "--help" ]]; then
+if [[ "$#" -gt 1 || "${1}" == "--help" ]]; then
     echo "Syntax: . base [label]" 1>&2
     echo "The \".\" at the beginning is required. " \
          "Type \"man base\" for details." 1>&2
