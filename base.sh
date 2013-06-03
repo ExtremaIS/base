@@ -152,7 +152,7 @@ base_deactivate () {
 #   * variables used by this script are set
 #   * autocompletion rules for bcd are added
 ##############################################################################
-if [[ "${BASH_SOURCE[0]}" == "${0}" || "$#" -gt 1 || "${1}" == "--help" ]] ; then
+if [[ "${BASH_SOURCE[0]}" == "$0" || "$#" -gt 1 || "$1" == "--help" ]] ; then
     echo "Syntax: . base [label]" 1>&2
     echo "The \".\" at the beginning is required. " \
          "Type \"man base\" for details." 1>&2
@@ -165,7 +165,7 @@ else
         export BASE_OLD_PROMPT_COMMAND="${PROMPT_COMMAND}"
     fi
     if [ "$#" -eq 1 ] ; then
-        export BASE_LABEL="${1}"
+        export BASE_LABEL="$1"
     else
         export BASE_LABEL="$(basename "$(pwd)")"
     fi
