@@ -6,7 +6,6 @@
 #
 # Author: Travis Cardwell <travis.cardwell@yuzutechnology.com>
 # URL: http://www.yuzutechnology.com/products/base (coming soon)
-# Version: 1.0.1
 # Copyright (c) 2011-2013, Yuzu Technology, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -152,10 +151,26 @@ base_deactivate () {
 #   * variables used by this script are set
 #   * autocompletion rules for bcd are added
 ##############################################################################
-if [[ "$#" -gt 1 || "$#" -eq 1 && "${1}" == "--help" ]]; then
-    echo "Syntax: . base [label]" 1>&2
+if [ "${BASH_SOURCE[0]}" == "$0" ] ; then
+    if [[ "$#" -eq 1 && "$1" == "--version" ]] ; then
+        echo "base 1.0.2"
+        exit 0
+    fi
+    echo "Usage: . base [label]    (create a base environment)" 1>&2
+    echo "       base --help       (display this help and exit)" 1>&2
+    echo "       base --version    (display the version and exit)" 1>&2
     echo "The \".\" at the beginning is required. " \
-         "Type \"man base\" for details." 1>&2
+         "See the man page for details." 1>&2
+    if [[ "$#" -eq 1 && "$1" == "--help" ]] ; then
+        exit 0
+    fi
+    exit 2
+elif [ "$#" -gt 1 ] ; then
+    echo "base: error: invalid number of arguments; see base --help for usage"
+    unset -f _base_ps_update
+    unset -f _base_autocomplete
+    unset -f bcd
+    unset -f base_deactivate
 else
     if [ -f ".base.activate.sh" ] ; then
         source ".base.activate.sh"
@@ -165,9 +180,9 @@ else
         export BASE_OLD_PROMPT_COMMAND="${PROMPT_COMMAND}"
     fi
     if [ "$#" -eq 1 ] ; then
-        export BASE_LABEL="${1}"
+        export BASE_LABEL="$1"
     else
-        export BASE_LABEL="${PWD##*/}"
+        export BASE_LABEL="$(basename "$(pwd)")"
     fi
     export BASE="${PWD}"
     export PROMPT_COMMAND="_base_ps_update"
