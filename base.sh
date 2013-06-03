@@ -153,9 +153,10 @@ base_deactivate () {
 #   * autocompletion rules for bcd are added
 ##############################################################################
 if [[ "${BASH_SOURCE[0]}" == "$0" || "$#" -gt 1 || "$1" == "--help" ]] ; then
-    echo "Syntax: . base [label]" 1>&2
+    echo "Usage: . base [label]" 1>&2
     echo "The \".\" at the beginning is required. " \
-         "Type \"man base\" for details." 1>&2
+         "See the man page for details." 1>&2
+    exit 2
 else
     if [ -f ".base.activate.sh" ] ; then
         source ".base.activate.sh"
