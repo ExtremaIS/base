@@ -1,3 +1,15 @@
+base (1.0.2) unstable; urgency=low
+
+  * base.sh: cleaned argument error handling
+
+  * base.sh: cleaned --help option
+
+  * base.sh: added --version option
+
+  * base.sh: use basename for automatic base label
+
+ -- Travis Cardwell <travis.cardwell@yuzutechnology.com>  Mon, 3 June 2013 10:20:00 +0900
+
 base (1.0.1) unstable; urgency=low
 
   * fixed prefix bugs where base/home directory names are prefixes of other
