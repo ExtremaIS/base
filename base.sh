@@ -4,9 +4,9 @@
 # base.sh - base directory environment
 ##############################################################################
 #
-# Author: Travis Cardwell <travis.cardwell@yuzutechnology.com>
-# URL: http://www.yuzutechnology.com/products/base (coming soon)
-# Copyright (c) 2011-2013, Yuzu Technology, Inc.
+# Author: Travis Cardwell <travis.cardwell@extellisys>
+# URL: http://www.extellisys.com/products/base
+# Copyright (c) 2011-2014, Extellisys
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to

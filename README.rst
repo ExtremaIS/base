@@ -61,30 +61,28 @@ example::
 Availability
 ------------
 
-This software is being pre-released on GitHub before the launch of the Yuzu
-Technology website:
-
-https://github.com/yuzutechnology/base
+* Homepage: http://www.extellisys.com/products/base
+* Source: https://github.com/extellisys/base
 
 Author
 ------
 
-Travis Cardwell <travis.cardwell@yuzutechnology.com>
+Travis Cardwell <travis.cardwell@extellisys.com>
 
 Reporting Bugs
 --------------
 
-Please post bugs and feature requests to GitHub:
+Please submit any issues to:
 
-https://github.com/yuzutechnology/base/issues
+https://github.com/extellisys/base/issues
 
-If you do not have a GitHub account, feel free to write email to
-<bugs@yuzutechnology.com>.  General feedback is also welcome.
+If you do not have a GitHub account, feel free to submit issues via email to
+<bugs@extellisys.com>.
 
 Copyright
 ---------
 
-Copyright (c) 2011-2013, Yuzu Technology, Inc.
+Copyright (c) 2011-2014, Extellisys
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
