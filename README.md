@@ -2,12 +2,12 @@ base - base directory environment
 =================================
 
 **base** creates an environment with a base directory.  Execute **base** from
-the base directory using "." at the beginning, so that it is executed within
+the base directory using `.` at the beginning, so that it is executed within
 your current environment, as follows::
 
-  $ . base [label]
+    $ . base [label]
 
-If you do not use the "." then the command will have no (lasting) effect.  The
+If you do not use the `.` then the command will have no (lasting) effect.  The
 *label* can be used to identify the environment.  If you do not specify one,
 then the name of the base directory is used.
 
@@ -17,13 +17,13 @@ path within the base directory are displayed.  For example, when in the `src`
 directory under a base environment labelled *app*, the prompt would be
 displayed as follows::
 
-  [app] /src$
+    [app] /src$
 
 When outside the base directory, the label in parenthesis and the current path
 are displayed.  For example, when in the `/etc` directory outside of a base
 environment labelled *app*, the prompt would be displayed as follows::
 
-  (app) /etc$
+    (app) /etc$
 
 **base** adds two functions to your environment: `bcd` and `base_deactivate`.
 
@@ -50,34 +50,34 @@ Installation
 
 **base** can be installed using the following command::
 
-  $ sudo make install
+    $ sudo make install
 
 By default, `make install` installs within `/usr/local`.  You can specify a
 different destination directory by setting the `prefix` as in the following
 example::
 
-  $ sudo make prefix=/some/dir install
+    $ sudo make prefix=/some/dir install
 
 Availability
 ------------
 
-* Homepage: http://www.extellisys.com/products/base
-* Source: https://github.com/extellisys/base
+* Homepage: <http://www.extellisys.com/products/base>
+* Source: <https://github.com/extellisys/base>
 
 Author
 ------
 
-Travis Cardwell <travis.cardwell@extellisys.com>
+Travis Cardwell &lt;<travis.cardwell@extellisys.com>&gt;
 
 Reporting Bugs
 --------------
 
 Please submit any issues to:
 
-https://github.com/extellisys/base/issues
+<https://github.com/extellisys/base/issues>
 
-If you do not have a GitHub account, feel free to submit issues via email to
-<bugs@extellisys.com>.
+If you do not have a [GitHub](https://github.com) account, feel free to submit
+issues via email to <bugs@extellisys.com>.
 
 Copyright
 ---------
