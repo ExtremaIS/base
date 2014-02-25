@@ -136,7 +136,7 @@ base_deactivate () {
     unset -f _base_autocomplete
     unset -f bcd
     unset -f base_deactivate
-    unset -f base_select
+    unset -f _base_select
     unset BASE_LABEL
     if [ -f "${BASE}/.base.deactivate.sh" ] ; then
         source "${BASE}/.base.deactivate.sh"
@@ -209,6 +209,7 @@ elif [ "$#" -gt 1 ] ; then
     unset -f _base_autocomplete
     unset -f bcd
     unset -f base_deactivate
+    unset -f _base_select
 else
     if [ -f ".base.activate.sh" ] ; then
         source ".base.activate.sh"
