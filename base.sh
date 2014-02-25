@@ -136,11 +136,49 @@ base_deactivate () {
     unset -f _base_autocomplete
     unset -f bcd
     unset -f base_deactivate
+    unset -f base_select
     unset BASE_LABEL
     if [ -f "${BASE}/.base.deactivate.sh" ] ; then
         source "${BASE}/.base.deactivate.sh"
     fi
     unset BASE
+}
+
+##############################################################################
+# _base_select: select an option
+#
+# Arguments:
+#   * $1 (string): label
+#   * ... (string): any number of options
+# Returns: <none>
+# Side Effects:
+#   * queries the user if a selection has to be made
+#   * sets or unsets the BASE_SELECTION variable
+#
+# This is an internal utility function that is meant to be used in base
+# scripts.
+##############################################################################
+_base_select () {
+    if [ "$#" -le "1" ] ; then
+        unset BASE_SELECTION
+    elif [ "$#" -eq "2" ] ; then
+        BASE_SELECTION="$2"
+    else
+        local args len sel cur
+        args=( "$@" )
+        len=${#args[@]}
+        sel=1
+        cur=1
+        while [ "$cur" -lt "$len" ] ; do
+            echo "$cur) ${args[$cur]}"
+            let "cur = $cur + 1"
+        done
+        read -p "Select $1 [1]: " cur
+        if [[ "$cur" != "" && "$cur" != "0" && "${args[$cur]+ok}" ]] ; then
+            sel="$cur"
+        fi
+        BASE_SELECTION="${args[$sel]}"
+    fi
 }
 
 ##############################################################################
