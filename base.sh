@@ -132,11 +132,8 @@ base_deactivate () {
         unset BASE_OLD_PROMPT_COMMAND
     fi
     complete -r bcd
-    unset -f _base_ps_update
-    unset -f _base_autocomplete
-    unset -f bcd
-    unset -f base_deactivate
-    unset -f _base_select
+    unset -f _base_ps_update _base_autocomplete _base_select
+    unset -f bcd base_deactivate
     unset BASE_LABEL
     if [ -f "${BASE}/.base.deactivate.sh" ] ; then
         source "${BASE}/.base.deactivate.sh"
@@ -205,11 +202,8 @@ if [ "${BASH_SOURCE[0]}" == "$0" ] ; then
     exit 2
 elif [ "$#" -gt 1 ] ; then
     echo "base: error: invalid number of arguments; see base --help for usage"
-    unset -f _base_ps_update
-    unset -f _base_autocomplete
-    unset -f bcd
-    unset -f base_deactivate
-    unset -f _base_select
+    unset -f _base_ps_update _base_autocomplete _base_select
+    unset -f bcd base_deactivate
 else
     if [ -f ".base.activate.sh" ] ; then
         source ".base.activate.sh"
