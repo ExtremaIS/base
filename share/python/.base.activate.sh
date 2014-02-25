@@ -51,4 +51,5 @@ else
 	else
 		echo "warning: no virtual environment loaded" >&2
 	fi
+	unset venvs venvs_len venvs_sel venvs_i
 fi
