@@ -182,7 +182,7 @@ else
     if [ "$#" -eq 1 ] ; then
         export BASE_LABEL="$1"
     else
-        export BASE_LABEL="$(basename "$(pwd)")"
+        export BASE_LABEL="$(basename "$PWD")"
     fi
     export BASE="${PWD}"
     export PROMPT_COMMAND="_base_ps_update"
