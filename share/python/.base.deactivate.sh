@@ -6,7 +6,7 @@
 ##############################################################################
 #
 # This is a `base` deactivation script for Python projects.  To use it, create
-# soft links to the accompanying activation script and this deactivation
+# soft-links to the accompanying activation script and this deactivation
 # script as follows:
 #
 #     $ cd ~/projects/example

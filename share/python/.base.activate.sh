@@ -6,7 +6,7 @@
 ##############################################################################
 #
 # This is a `base` activation script for Python projects.  To use it, create
-# soft links to this activation script and the accompanying deactivation
+# soft-links to this activation script and the accompanying deactivation
 # script as follows:
 #
 #     $ cd ~/projects/example
@@ -19,7 +19,7 @@
 # This script automatically activates Python virtual environments when the
 # base is activated.  It expects Python virtual environments to be setup in
 # directories named "virtualenv-VERSION" in the project root.  If more than
-# one virtual environment is available, then script will prompt you to select
+# one virtual environment is available, the script will prompt you to select
 # an environment to use.  Enter a selection by number, or just press enter to
 # accept the default.  Create a soft-link called "virtualenv" to a specific
 # version to make it load automatically, without prompting.  If there is only
