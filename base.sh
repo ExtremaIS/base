@@ -171,7 +171,7 @@ _base_select () {
             let "cur = $cur + 1"
         done
         read -p "Select $1 [1]: " cur
-        cur=$(echo "$cur" | grep "^[0-9]\+$")
+        cur="$(echo "$cur" | grep "^[0-9]\+$")"
         if [[ "$cur" != "" && "$cur" -gt "0" && "$cur" -lt "$len" ]]; then
             sel="$cur"
         fi
@@ -216,7 +216,7 @@ else
     if [ "$#" -eq 1 ] ; then
         export BASE_LABEL="$1"
     else
-        export BASE_LABEL=$(basename "$PWD")
+        export BASE_LABEL="$(basename "$PWD")"
     fi
     export BASE="${PWD}"
     export PROMPT_COMMAND="_base_ps_update"
