@@ -171,7 +171,8 @@ _base_select () {
             let "cur = $cur + 1"
         done
         read -p "Select $1 [1]: " cur
-        if [[ "$cur" != "" && "$cur" != "0" && "${args[$cur]+ok}" ]] ; then
+        cur=$(echo "$cur" | grep "^[0-9]\+$")
+        if [[ "$cur" != "" && "$cur" -gt "0" && "$cur" -lt "$len" ]]; then
             sel="$cur"
         fi
         BASE_SELECTION="${args[$sel]}"
