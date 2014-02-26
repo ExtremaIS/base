@@ -124,6 +124,10 @@ bcd () {
 # This function is called directly from the command line.
 ##############################################################################
 base_deactivate () {
+    if [ "$(type -t "_base_deactivate_pre")" == "function" ] ; then
+        _base_deactivate_pre
+        unset -f _base_deactivate_pre
+    fi
     unset PROMPT_COMMAND
     export PS1="${BASE_OLD_PS1}"
     unset BASE_OLD_PS1
@@ -135,10 +139,11 @@ base_deactivate () {
     unset -f _base_ps_update _base_autocomplete _base_select
     unset -f bcd base_deactivate
     unset BASE_LABEL
-    if [ -f "${BASE}/.base.deactivate.sh" ] ; then
-        source "${BASE}/.base.deactivate.sh"
-    fi
     unset BASE
+    if [ "$(type -t "_base_deactivate_post")" == "function" ] ; then
+        _base_deactivate_post
+        unset -f _base_deactivate_post
+    fi
 }
 
 ##############################################################################
@@ -206,8 +211,12 @@ elif [ "$#" -gt 1 ] ; then
     unset -f _base_ps_update _base_autocomplete _base_select
     unset -f bcd base_deactivate
 else
-    if [ -f ".base.activate.sh" ] ; then
-        source ".base.activate.sh"
+    if [ -f ".base" ] ; then
+        source ".base"
+    fi
+    if [ "$(type -t "_base_activate_pre")" == "function" ] ; then
+        _base_activate_pre
+        unset -f _base_activate_pre
     fi
     export BASE_OLD_PS1="${PS1}"
     if [ -n "${PROMPT_COMMAND}" ] ; then
@@ -221,4 +230,8 @@ else
     export BASE="${PWD}"
     export PROMPT_COMMAND="_base_ps_update"
     complete -o filenames -F _base_autocomplete bcd
+    if [ "$(type -t "_base_activate_post")" == "function" ] ; then
+        _base_activate_post
+        unset -f _base_activate_post
+    fi
 fi
