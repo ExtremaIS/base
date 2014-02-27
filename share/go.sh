@@ -37,7 +37,7 @@ _base_activate_pre () {
             export GOROOT="$(readlink ".go")"
         elif [ -d "/usr/local/opt" ] ; then
             _base_select "Go installation" \
-                $(ls -d /usr/local/opt/go-* | sort -rV)
+                $(ls -d /usr/local/opt/go-* 2>/dev/null | sort -rV)
             if [ -n "$BASE_SELECTION" ] ; then
                 export GOROOT="$BASE_SELECTION"
                 unset BASE_SELECTION

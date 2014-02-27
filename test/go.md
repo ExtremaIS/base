@@ -38,12 +38,33 @@ Run:
     $ base_deactivate
     $ sudo mv /usr/local/_opt /usr/local/opt
 
-one installation
+no installations
 ----------------
 
 Run:
 
     $ sudo mv /usr/local/opt/go-1.1-rc3 /usr/local/opt/_go-1.1-rc3
+    $ sudo mv /usr/local/opt/go-1.2 /usr/local/opt/_go-1.2
+    $ . base
+
+Expect:
+
+* stderr: `warning: no Go installations found`
+* stderr: `warning: unable to set GOROOT`
+* stderr: `bash: go: command not found`
+* prompt: `[project] $`
+* title: `[project]`
+
+Run:
+
+    $ base_deactivate
+
+one installation
+----------------
+
+Run:
+
+    $ sudo mv /usr/local/opt/_go-1.2 /usr/local/opt/go-1.2
     $ . base
 
 Expect:
