@@ -30,7 +30,8 @@
 ##############################################################################
 # base creates an environment with a base directory.  The environment has a
 # clean prompt and terminal title, and it provides a command for changing
-# directories relative to the base directory.  See the man page for details.
+# directories relative to the base directory.  Scripts can be written to
+# customize each base environment.  See the man page for details.
 ##############################################################################
 
 ##############################################################################
@@ -147,7 +148,7 @@ base_deactivate () {
 }
 
 ##############################################################################
-# _base_select: select an option
+# _base_select: selects an option
 #
 # Arguments:
 #   * $1 (string): label
@@ -157,8 +158,7 @@ base_deactivate () {
 #   * queries the user if a selection has to be made
 #   * sets or unsets the BASE_SELECTION variable
 #
-# This is an internal utility function that is meant to be used in base
-# scripts.
+# This is an internal utility function that can be used within base scripts.
 ##############################################################################
 _base_select () {
     if [ "$#" -le "1" ] ; then
