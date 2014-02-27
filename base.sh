@@ -139,8 +139,7 @@ base_deactivate () {
     complete -r bcd
     unset -f _base_ps_update _base_autocomplete _base_select
     unset -f bcd base_deactivate
-    unset BASE_LABEL
-    unset BASE
+    unset BASE_LABEL BASE
     if [ "$(type -t "_base_deactivate_post")" == "function" ] ; then
         _base_deactivate_post
         unset -f _base_deactivate_post
