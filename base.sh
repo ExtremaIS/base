@@ -197,11 +197,11 @@ if [ "${BASH_SOURCE[0]}" == "$0" ] ; then
         echo "base 1.0.2"
         exit 0
     fi
-    echo "Usage: . base [label]    (create a base environment)" 1>&2
-    echo "       base --help       (display this help and exit)" 1>&2
-    echo "       base --version    (display the version and exit)" 1>&2
+    echo "Usage: . base [label]    (create a base environment)" >&2
+    echo "       base --help       (display this help and exit)" >&2
+    echo "       base --version    (display the version and exit)" >&2
     echo "The \".\" at the beginning is required. " \
-         "See the man page for details." 1>&2
+         "See the man page for details." >&2
     if [[ "$#" -eq 1 && "$1" == "--help" ]] ; then
         exit 0
     fi
