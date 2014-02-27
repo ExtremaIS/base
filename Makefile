@@ -14,6 +14,6 @@ install:
 	mkdir -p $(DESTDIR)$(man1dir)
 	install -m 644 man/base.1 $(DESTDIR)$(man1dir)/base.1
 	mkdir -p $(DESTDIR)$(docdir)
-	install -m 644 README.rst Changelog $(DESTDIR)$(docdir)
+	install -m 644 README.md Changelog $(DESTDIR)$(docdir)
 
 .PHONY: none install
