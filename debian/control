@@ -13,4 +13,5 @@ Depends: bash (>= 4), sed (>= 4), findutils (>= 4)
 Description: base directory environment
  base creates an environment with a base directory.  The environment has a
  clean prompt and terminal title, and it provides a command for changing
- directories relative to the base directory.
+ directories relative to the base directory.  Scripts can be written to
+ customize each base environment.
