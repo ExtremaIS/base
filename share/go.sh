@@ -15,13 +15,14 @@
 #
 # The GOROOT and GOPATH environment variables are automatically set when the
 # base is activated, if they are not already set.  Go installations are
-# expected to be in directories named "go-VERSION" in /usr/local/opt.  If
-# more than one Go installation is available, you will be prompted to select
-# an installation to use.  Enter a selection by number, or just press enter to
-# accept the default.  Create a soft-link in the base directory called ".go"
-# to a specific version to select that version automatically, without
-# prompting.  If there is only one version available, it is selected without
-# prompting.  The PATH is modified appropriately.
+# expected to be in directories named "go-VERSION" in /usr/local/opt.  (Note
+# that directory names with spaces are not supported.)  If more than one Go
+# installation is available, you will be prompted to select an installation to
+# use.  Enter a selection by number, or just press enter to accept the
+# default.  Create a soft-link in the base directory called ".go" to a
+# specific version to select that version automatically, without prompting.
+# If there is only one version available, it is selected without prompting.
+# The PATH is modified appropriately.
 #
 # The base is expected to be within a Go workspace, as in the example above.
 # If there is a Go dependencies workspace in a directory named `depsws` under

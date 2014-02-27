@@ -15,12 +15,13 @@
 #
 # A Python virtual environment is automatically activated when the base is
 # activated.  Python virtual environments are expected to be in directories
-# named "virtualenv-VERSION" in the base directory.  If more than one virtual
-# environment is available, you will be prompted to select an environment to
-# use.  Enter a selection by number, or just press enter to accept the
-# default.  Create a soft-link in the base directory called "virtualenv" to a
-# specific version to select that version automatically, without prompting.
-# If there is only one version available, it is selected without prompting.
+# named "virtualenv-VERSION" in the base directory.  (Note that directory
+# names with spaces are not supported.)  If more than one virtual environment
+# is available, you will be prompted to select an environment to use.  Enter a
+# selection by number, or just press enter to accept the default.  Create a
+# soft-link in the base directory called "virtualenv" to a specific version to
+# select that version automatically, without prompting.  If there is only one
+# version available, it is selected without prompting.
 #
 # The Python virtual environment is automatically deactivated when the base is
 # deactivated.

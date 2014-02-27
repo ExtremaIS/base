@@ -15,14 +15,14 @@
 #
 # The PATH environment variable is automatically modified when the base is
 # activated.  Haskell installations are expected to be in directories named
-# "ghc-VERSION" in /usr/local/opt.  If more than one Haskell installation is
-# available, you will be prompted to select an installation to use.  Enter a
-# selection by number, or just press enter to accept the default.  Create a
-# soft-link in the base directory called ".haskell" to a specific version to
-# select that version automatically, without prompting.  If there is only one
-# version available, it is selected without prompting.  If a
-# .cabal-sandbox/bin directory is found in the base directory, then it
-# prepended to the PATH.
+# "ghc-VERSION" in /usr/local/opt.  (Note that directory names with spaces are
+# not supported.)  If more than one Haskell installation is available, you
+# will be prompted to select an installation to use.  Enter a selection by
+# number, or just press enter to accept the default.  Create a soft-link in
+# the base directory called ".haskell" to a specific version to select that
+# version automatically, without prompting.  If there is only one version
+# available, it is selected without prompting.  If a .cabal-sandbox/bin
+# directory is found in the base directory, then it prepended to the PATH.
 #
 # The PATH is automatically reset when the base is deactivated.
 ##############################################################################
