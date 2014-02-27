@@ -17,7 +17,7 @@ install:
 	install -m 644 share/haskell.sh $(DESTDIR)$(sharedir)
 	install -m 644 share/python.sh $(DESTDIR)$(sharedir)
 	mkdir -p $(DESTDIR)$(man1dir)
-	install -m 644 man/base.1 $(DESTDIR)$(man1dir)/base.1
+	install -m 644 man/base.1 $(DESTDIR)$(man1dir)
 	mkdir -p $(DESTDIR)$(docdir)
 	install -m 644 README.md Changelog $(DESTDIR)$(docdir)
 
