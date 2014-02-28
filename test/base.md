@@ -197,6 +197,32 @@ Expect:
 * prompt: (normal)
 * title: (normal)
 
+root
+----
+
+Run:
+
+    $ sudo su
+    # . base
+
+Expect:
+
+* prompt: `[basetest] #` (root prompt)
+* title: `[basetest]`
+
+Run:
+
+    # base_deactivate
+
+Expect:
+
+* prompt: (normal)
+* title: (normal)
+
+Run:
+
+    # exit
+
 (cleanup)
 ---------
 
