@@ -1,5 +1,7 @@
 2013-06-03  Travis Cardwell  <travis.cardwell@yuzutechnology.com>
 
+	* release: 1.0.2
+
     * base.sh: cleaned argument error handling
 
     * base.sh: cleaned --help option
@@ -10,6 +12,8 @@
 
 2013-05-13  Travis Cardwell  <travis.cardwell@yuzutechnology.com>
 
+	* release: 1.0.1
+
     * base.sh: fixed prefix bugs where base/home directory names are prefixes
     of other directory names
 
@@ -17,4 +21,4 @@
 
 2011-07-17  Travis Cardwell  <travis.cardwell@yuzutechnology.com>
 
-	* initial release: 1.0.0
+	* release: 1.0.0
