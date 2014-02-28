@@ -1,3 +1,21 @@
+base (1.1.0) unstable; urgency=low
+
+  * base.sh: switch to .base cusomization using callbacks
+
+  * base.sh: add _base_select utility function
+
+  * base.sh: add BASE_NO_TITLE support
+
+  * share/python.sh: initial release
+
+  * share/go.sh: initial release
+
+  * share/haskell.sh: initial release
+
+  * test/*: add test notes
+
+ -- Travis Cardwell <travis.cardwell@extellisys.com>  Fri, 28 Feb 2014 11:25:00 +0900
+
 base (1.0.2) unstable; urgency=low
 
   * base.sh: cleaned argument error handling
