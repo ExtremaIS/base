@@ -4,9 +4,9 @@
 # base.sh - base directory environment
 ##############################################################################
 #
-# Author: Travis Cardwell <travis.cardwell@yuzutechnology.com>
-# URL: http://www.yuzutechnology.com/products/base (coming soon)
-# Copyright (c) 2011-2013, Yuzu Technology, Inc.
+# Author: Travis Cardwell <travis.cardwell@extellisys>
+# URL: http://www.extellisys.com/products/base
+# Copyright (c) 2011-2014, Extellisys
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -30,7 +30,8 @@
 ##############################################################################
 # base creates an environment with a base directory.  The environment has a
 # clean prompt and terminal title, and it provides a command for changing
-# directories relative to the base directory.  See the man page for details.
+# directories relative to the base directory.  Scripts can be written to
+# customize each base environment.  See the man page for details.
 ##############################################################################
 
 ##############################################################################
@@ -39,10 +40,13 @@
 # Arguments: <none>
 # Returns: <none>
 # Side Effects:
-#   * writes to PS1, updating both the prompt and title
+#   * writes to PS1, updating the prompt/title
 #
 # This is an internal function that should not be executed directly.  It is
 # called via PROMPT_COMMAND.
+#
+# If an environment variable named BASE_NO_TITLE exists, then the title is not
+# updated.
 ##############################################################################
 _base_ps_update () {
     local lpath suffix
@@ -61,7 +65,11 @@ _base_ps_update () {
     if [ "${USER}" == "root" ] ; then
         suffix="# "
     fi
-    export PS1="\[\e]2;${lpath}\a\]${lpath}${suffix}"
+    if [ -n "$BASE_NO_TITLE" ] ; then
+        export PS1="${lpath}${suffix}"
+    else
+        export PS1="\[\e]2;${lpath}\a\]${lpath}${suffix}"
+    fi
 }
 
 ##############################################################################
@@ -124,6 +132,10 @@ bcd () {
 # This function is called directly from the command line.
 ##############################################################################
 base_deactivate () {
+    if [ "$(type -t "_base_deactivate_pre")" == "function" ] ; then
+        _base_deactivate_pre
+        unset -f _base_deactivate_pre
+    fi
     unset PROMPT_COMMAND
     export PS1="${BASE_OLD_PS1}"
     unset BASE_OLD_PS1
@@ -132,15 +144,50 @@ base_deactivate () {
         unset BASE_OLD_PROMPT_COMMAND
     fi
     complete -r bcd
-    unset -f _base_ps_update
-    unset -f _base_autocomplete
-    unset -f bcd
-    unset -f base_deactivate
-    unset BASE_LABEL
-    if [ -f "${BASE}/.base.deactivate.sh" ] ; then
-        source "${BASE}/.base.deactivate.sh"
+    unset -f _base_ps_update _base_autocomplete _base_select
+    unset -f bcd base_deactivate
+    unset BASE_SELECTION BASE_LABEL BASE
+    if [ "$(type -t "_base_deactivate_post")" == "function" ] ; then
+        _base_deactivate_post
+        unset -f _base_deactivate_post
     fi
-    unset BASE
+}
+
+##############################################################################
+# _base_select: selects an option
+#
+# Arguments:
+#   * $1 (string): label
+#   * ... (string): any number of options
+# Returns: <none>
+# Side Effects:
+#   * queries the user if a selection has to be made
+#   * sets or unsets the BASE_SELECTION variable
+#
+# This is an internal utility function that can be used within base scripts.
+##############################################################################
+_base_select () {
+    if [ "$#" -le "1" ] ; then
+        unset BASE_SELECTION
+    elif [ "$#" -eq "2" ] ; then
+        BASE_SELECTION="$2"
+    else
+        local args len sel cur
+        args=( "$@" )
+        len=${#args[@]}
+        sel=1
+        cur=1
+        while [ "$cur" -lt "$len" ] ; do
+            echo "$cur) ${args[$cur]}"
+            let "cur = $cur + 1"
+        done
+        read -p "Select $1 [1]: " cur
+        cur="$(echo "$cur" | grep "^[0-9]\+$")"
+        if [[ "$cur" != "" && "$cur" -gt "0" && "$cur" -lt "$len" ]]; then
+            sel="$cur"
+        fi
+        BASE_SELECTION="${args[$sel]}"
+    fi
 }
 
 ##############################################################################
@@ -153,27 +200,29 @@ base_deactivate () {
 ##############################################################################
 if [ "${BASH_SOURCE[0]}" == "$0" ] ; then
     if [[ "$#" -eq 1 && "$1" == "--version" ]] ; then
-        echo "base 1.0.2"
+        echo "base 1.1.0"
         exit 0
     fi
-    echo "Usage: . base [label]    (create a base environment)" 1>&2
-    echo "       base --help       (display this help and exit)" 1>&2
-    echo "       base --version    (display the version and exit)" 1>&2
+    echo "Usage: . base [label]    (create a base environment)" >&2
+    echo "       base --help       (display this help and exit)" >&2
+    echo "       base --version    (display the version and exit)" >&2
     echo "The \".\" at the beginning is required. " \
-         "See the man page for details." 1>&2
+         "See the man page for details." >&2
     if [[ "$#" -eq 1 && "$1" == "--help" ]] ; then
         exit 0
     fi
     exit 2
 elif [ "$#" -gt 1 ] ; then
     echo "base: error: invalid number of arguments; see base --help for usage"
-    unset -f _base_ps_update
-    unset -f _base_autocomplete
-    unset -f bcd
-    unset -f base_deactivate
+    unset -f _base_ps_update _base_autocomplete _base_select
+    unset -f bcd base_deactivate
 else
-    if [ -f ".base.activate.sh" ] ; then
-        source ".base.activate.sh"
+    if [ -f ".base" ] ; then
+        source ".base"
+    fi
+    if [ "$(type -t "_base_activate_pre")" == "function" ] ; then
+        _base_activate_pre
+        unset -f _base_activate_pre
     fi
     export BASE_OLD_PS1="${PS1}"
     if [ -n "${PROMPT_COMMAND}" ] ; then
@@ -182,9 +231,13 @@ else
     if [ "$#" -eq 1 ] ; then
         export BASE_LABEL="$1"
     else
-        export BASE_LABEL="$(basename "$(pwd)")"
+        export BASE_LABEL="$(basename "$PWD")"
     fi
     export BASE="${PWD}"
     export PROMPT_COMMAND="_base_ps_update"
     complete -o filenames -F _base_autocomplete bcd
+    if [ "$(type -t "_base_activate_post")" == "function" ] ; then
+        _base_activate_post
+        unset -f _base_activate_post
+    fi
 fi

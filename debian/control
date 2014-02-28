@@ -1,11 +1,11 @@
 Source: base
 Section: devel
 Priority: optional
-Maintainer: Travis Cardwell <travis.cardwell@yuzutechnology.com>
+Maintainer: Travis Cardwell <travis.cardwell@extellisys.com>
 Standards-Version: 3.9.1.0
-Vcs-Git: git://github.com/yuzutechnology/base.git
-Vcs-browser: https://github.com/yuzutechnology/base
-Homepage: http://www.yuzutechnology.com/products/base
+Vcs-Git: git://github.com/extellisys/base.git
+Vcs-browser: https://github.com/extellisys/base
+Homepage: http://www.extellisys.com/products/base
 
 Package: base
 Architecture: all
@@ -13,4 +13,5 @@ Depends: bash (>= 4), sed (>= 4), findutils (>= 4)
 Description: base directory environment
  base creates an environment with a base directory.  The environment has a
  clean prompt and terminal title, and it provides a command for changing
- directories relative to the base directory.
+ directories relative to the base directory.  Scripts can be written to
+ customize each base environment.

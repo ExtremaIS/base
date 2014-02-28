@@ -1,4 +1,24 @@
+2014-02-28  Travis Cardwell  <travis.cardwell@extellisys.com>
+
+    * release: 1.1.0
+
+    * base.sh: switch to .base cusomization using callbacks
+
+    * base.sh: add _base_select utility function
+
+    * base.sh: add BASE_NO_TITLE support
+
+    * share/python.sh: initial release
+
+    * share/go.sh: initial release
+
+    * share/haskell.sh: initial release
+
+    * test/*: add test notes
+
 2013-06-03  Travis Cardwell  <travis.cardwell@yuzutechnology.com>
+
+	* release: 1.0.2
 
     * base.sh: cleaned argument error handling
 
@@ -10,6 +30,8 @@
 
 2013-05-13  Travis Cardwell  <travis.cardwell@yuzutechnology.com>
 
+	* release: 1.0.1
+
     * base.sh: fixed prefix bugs where base/home directory names are prefixes
     of other directory names
 
@@ -17,4 +39,4 @@
 
 2011-07-17  Travis Cardwell  <travis.cardwell@yuzutechnology.com>
 
-	* initial release: 1.0.0
+	* release: 1.0.0
