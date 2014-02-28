@@ -200,7 +200,7 @@ _base_select () {
 ##############################################################################
 if [ "${BASH_SOURCE[0]}" == "$0" ] ; then
     if [[ "$#" -eq 1 && "$1" == "--version" ]] ; then
-        echo "base 1.0.2"
+        echo "base 1.1.0"
         exit 0
     fi
     echo "Usage: . base [label]    (create a base environment)" >&2
