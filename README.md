@@ -7,9 +7,8 @@ your current environment, as follows::
 
     $ . base [label]
 
-If you do not use the `.` then the command will have no (lasting) effect.  The
-*label* can be used to identify the environment.  If you do not specify one,
-then the name of the base directory is used.
+The *label* can be used to identify the environment.  If you do not specify
+one, then the name of the base directory is used.
 
 The prompt and title of the terminal change according to what directory you
 are in.  When within the base directory, the label in brackets and the current
@@ -25,20 +24,43 @@ environment labelled *app*, the prompt would be displayed as follows::
 
     (app) /etc$
 
+If an environment variable named `BASE_NO_TITLE` exists, then the title is
+not changed.  This option is intended for use in terminals that do not have
+titles.
+
 **base** adds two functions to your environment: `bcd` and `base_deactivate`.
 
-The `bcd` function changes to directories relative to the base directory.
-Similar to how the `cd` command changes to your HOME directory when no
-arguments are given, `bcd` changes to your base directory when no arguments
-are given.  Use the tab key to use auto-completion relative to the base
-directory.
+The `bcd` function changes to directories relative to the base directory,
+using the tab key for auto-completion.  Similar to how the `cd` command
+changes to your HOME directory when no arguments are given, `bcd` changes to
+your base directory when no arguments are given.
 
 The `base_deactivate` function removes the effects of this script and restores
 previous settings.  Note that nested base environments are not supported.
 
-Scripts named `.base.activate.sh` and `.base.deactivate.sh` in the base
-directory are sourced automatically when base is activated/deactivated, if
-they exist.
+Customization
+-------------
+
+Environments can be customized by placing a script named `.base` in the base
+directory.  Such scripts can define functions named `_base_activate_pre`,
+`_base_activate_post`, `_base_deactivate_pre`, and/or `_base_deactivate_post`
+to specify commands to be run before activation, after activation, before
+deactivation, and after deactivation respectively.  If there are any side-
+effects when running one of the activation callbacks, take care to undo them
+in one of the deactivation callbacks.
+
+A utility function named `_base_select`, which allows the user to make a
+selection from a number of options, is available for use in all callbacks
+except `_base_deactivation_post`.  The first argument is a label that
+represents what is being selected, and remaining arguments are the options.
+The result is stored in the variable `BASE_SELECTION`.  If no options were
+available, the variable is unset.  If only one option is available, then that
+option is used without prompting.  Users select an option by number, and any
+invalid input results in the first option being selected.
+
+Some example base scripts are provided in the `share` directory, with
+documentation in the comments.  Use the scripts by linking to them, or copy
+and modify them as needed.
 
 Requirements
 ------------
@@ -48,7 +70,19 @@ Requirements
 Installation
 ------------
 
-**base** can be installed using the following command::
+**base** can be installed on Debian-based distributions using the package
+manager as follows:
+
+    $ wget http://www.extellisys.com/static/products/base_1.1.0_all.deb
+    $ sudo dpkg -i base_1.1.0_all.deb
+
+**base** can be installed on RedHat-based distributions using the package
+manager as follows:
+
+    $ wget http://www.extellisys.com/static/products/base-1.1.0-1.noarch.rpm
+    $ sudo rpm -i base-1.1.0-1.noarch.rpm
+
+**base** can be installed from source using the following command::
 
     $ sudo make install
 
