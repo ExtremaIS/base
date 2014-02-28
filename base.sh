@@ -40,10 +40,13 @@
 # Arguments: <none>
 # Returns: <none>
 # Side Effects:
-#   * writes to PS1, updating both the prompt and title
+#   * writes to PS1, updating the prompt/title
 #
 # This is an internal function that should not be executed directly.  It is
 # called via PROMPT_COMMAND.
+#
+# If an environment variable named BASE_NO_TITLE exists, then the title is not
+# updated.
 ##############################################################################
 _base_ps_update () {
     local lpath suffix
@@ -62,7 +65,11 @@ _base_ps_update () {
     if [ "${USER}" == "root" ] ; then
         suffix="# "
     fi
-    export PS1="\[\e]2;${lpath}\a\]${lpath}${suffix}"
+    if [ -n "$BASE_NO_TITLE" ] ; then
+        export PS1="${lpath}${suffix}"
+    else
+        export PS1="\[\e]2;${lpath}\a\]${lpath}${suffix}"
+    fi
 }
 
 ##############################################################################

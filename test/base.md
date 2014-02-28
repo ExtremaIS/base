@@ -174,6 +174,29 @@ Expect:
 * prompt: (normal)
 * title: (normal)
 
+no title
+--------
+
+Run:
+
+    $ export BASE_NO_TITLE=1
+    $ . base
+
+Expect:
+
+* prompt: `[basetest] $`
+* title: (normal)
+
+Run:
+
+    $ base_deactivate
+    $ unset BASE_NO_TITLE
+
+Expect:
+
+* prompt: (normal)
+* title: (normal)
+
 (cleanup)
 ---------
 
