@@ -1,3 +1,11 @@
+2014-03-04  Travis Cardwell  <travis.cardwell@extellisys.com>
+
+    * release: 1.1.1
+
+    * share/go.sh: add ~/.gows support
+
+    * base.sh: update variable syntax of consistency
+
 2014-02-28  Travis Cardwell  <travis.cardwell@extellisys.com>
 
     * release: 1.1.0

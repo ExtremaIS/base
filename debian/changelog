@@ -1,3 +1,11 @@
+base (1.1.1) unstable; urgency=low
+
+  * share/go.sh: add ~/.gows support
+
+  * base.sh: update variable syntax of consistency
+
+ -- Travis Cardwell <travis.cardwell@extellisys.com>  Tue, 4 Mar 2014 11:30:00 +0900
+
 base (1.1.0) unstable; urgency=low
 
   * base.sh: switch to .base cusomization using callbacks
