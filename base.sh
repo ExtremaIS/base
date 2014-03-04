@@ -50,25 +50,25 @@
 ##############################################################################
 _base_ps_update () {
     local lpath suffix
-    if [ "${BASE}" == "${PWD}" ] ; then
-        lpath="[${BASE_LABEL}] "
-    elif [ "${BASE}/" == "${PWD:0:$((${#BASE}+1))}" ] ; then
-        lpath="[${BASE_LABEL}] ${PWD:${#BASE}}"
-    elif [ "${HOME}" == "${PWD}" ] ; then
-        lpath="(${BASE_LABEL}) ~"
-    elif [ "${HOME}/" == "${PWD:0:$((${#HOME}+1))}" ] ; then
-        lpath="(${BASE_LABEL}) ~${PWD:${#HOME}}"
+    if [ "$BASE" == "$PWD" ] ; then
+        lpath="[$BASE_LABEL] "
+    elif [ "$BASE/" == "${PWD:0:$((${#BASE}+1))}" ] ; then
+        lpath="[$BASE_LABEL] ${PWD:${#BASE}}"
+    elif [ "$HOME" == "$PWD" ] ; then
+        lpath="($BASE_LABEL) ~"
+    elif [ "$HOME/" == "${PWD:0:$((${#HOME}+1))}" ] ; then
+        lpath="($BASE_LABEL) ~${PWD:${#HOME}}"
     else
-        lpath="(${BASE_LABEL}) ${PWD}"
+        lpath="($BASE_LABEL) $PWD"
     fi
     suffix="\$ "
-    if [ "${USER}" == "root" ] ; then
+    if [ "$USER" == "root" ] ; then
         suffix="# "
     fi
     if [ -n "$BASE_NO_TITLE" ] ; then
-        export PS1="${lpath}${suffix}"
+        export PS1="$lpath$suffix"
     else
-        export PS1="\[\e]2;${lpath}\a\]${lpath}${suffix}"
+        export PS1="\[\e]2;$lpath\a\]$lpath$suffix"
     fi
 }
 
@@ -86,17 +86,17 @@ _base_ps_update () {
 ##############################################################################
 _base_autocomplete () {
     local curr rest
-    curr="${BASE}"
+    curr="$BASE"
     rest="${2##*/}"
     if [ ${#2} -gt ${#rest} ] ; then
-        curr="${BASE}/${2%/*}"
+        curr="$BASE/${2%/*}"
     fi
-    COMPREPLY=( $( find "${curr}" -mindepth 1 -maxdepth 1 -type d \
-                                  -name "${rest}*" \
-                 | sed "s#^${BASE}/\(.*\)\$#\1/#" ) )
+    COMPREPLY=( $( find "$curr" -mindepth 1 -maxdepth 1 -type d \
+                                -name "$rest*" \
+                 | sed "s#^$BASE/\(.*\)\$#\1/#" ) )
     if [ ${#COMPREPLY[*]} -eq 1 ] ; then
-        COMPREPLY=( $( find "${BASE}/${COMPREPLY[0]}" -maxdepth 1 -type d \
-                     | sed "s#^${BASE}/\(.*\)\$#\1/#" ) )
+        COMPREPLY=( $( find "$BASE/${COMPREPLY[0]}" -maxdepth 1 -type d \
+                     | sed "s#^$BASE/\(.*\)\$#\1/#" ) )
         if [ ${#COMPREPLY[*]} -eq 1 ] ; then
             COMPREPLY=( ${COMPREPLY[0]%/} )
         fi
@@ -116,7 +116,7 @@ _base_autocomplete () {
 # This function is called directly from the command line.
 ##############################################################################
 bcd () {
-    cd "${BASE}/${1}"
+    cd "$BASE/$1"
 }
 
 ##############################################################################
@@ -137,10 +137,10 @@ base_deactivate () {
         unset -f _base_deactivate_pre
     fi
     unset PROMPT_COMMAND
-    export PS1="${BASE_OLD_PS1}"
+    export PS1="$BASE_OLD_PS1"
     unset BASE_OLD_PS1
-    if [ -n "${BASE_OLD_PROMPT_COMMAND}" ] ; then
-        export PROMPT_COMMAND="${BASE_OLD_PROMPT_COMMAND}"
+    if [ -n "$BASE_OLD_PROMPT_COMMAND" ] ; then
+        export PROMPT_COMMAND="$BASE_OLD_PROMPT_COMMAND"
         unset BASE_OLD_PROMPT_COMMAND
     fi
     complete -r bcd
@@ -200,7 +200,7 @@ _base_select () {
 ##############################################################################
 if [ "${BASH_SOURCE[0]}" == "$0" ] ; then
     if [[ "$#" -eq 1 && "$1" == "--version" ]] ; then
-        echo "base 1.1.0"
+        echo "base 1.1.1"
         exit 0
     fi
     echo "Usage: . base [label]    (create a base environment)" >&2
@@ -224,16 +224,16 @@ else
         _base_activate_pre
         unset -f _base_activate_pre
     fi
-    export BASE_OLD_PS1="${PS1}"
-    if [ -n "${PROMPT_COMMAND}" ] ; then
-        export BASE_OLD_PROMPT_COMMAND="${PROMPT_COMMAND}"
+    export BASE_OLD_PS1="$PS1"
+    if [ -n "$PROMPT_COMMAND" ] ; then
+        export BASE_OLD_PROMPT_COMMAND="$PROMPT_COMMAND"
     fi
     if [ "$#" -eq 1 ] ; then
         export BASE_LABEL="$1"
     else
         export BASE_LABEL="$(basename "$PWD")"
     fi
-    export BASE="${PWD}"
+    export BASE="$PWD"
     export PROMPT_COMMAND="_base_ps_update"
     complete -o filenames -F _base_autocomplete bcd
     if [ "$(type -t "_base_activate_post")" == "function" ] ; then

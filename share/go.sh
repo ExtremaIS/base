@@ -26,7 +26,8 @@
 #
 # The base is expected to be within a Go workspace, as in the example above.
 # If there is a Go dependencies workspace in a directory named `depsws` under
-# the base directory, then it is used.
+# the base directory, then it is used.  Otherwise, if there is a shared
+# dependencies Go workspace in `$HOME/.gows`, then it is used.
 #
 # The PATH is automatically reset, and the GOROOT and GOPATH environment
 # variables are automatically unset when the base is deactivated.
@@ -69,16 +70,22 @@ _base_activate_pre () {
     fi
     PATH_ORIG="$PATH"
     if [ -n "$GOROOT" ] ; then
-        export PATH="$GOROOT/bin:$PATH"
+        [ -d "$GOROOT/bin" ] && export PATH="$GOROOT/bin:$PATH"
     fi
-    if [ -d "$PWD/depsws/bin" ] ; then
-        export PATH="$PWD/depsws/bin:$PATH"
-    fi
-    if [ -n "$GOPATH" ] ; then
-        export PATH="$GOPATH/bin:$PATH"
-        if [ -d "$PWD/depsws" ] ; then
-            GOPATH="$PWD/depsws:$GOPATH"
+    if [ -d "$PWD/depsws" ] ; then
+        [ -d "$PWD/depsws/bin" ] && export PATH="$PWD/depsws/bin:$PATH"
+        if [ -n "$GOPATH" ] ; then
+            [ -d "$GOPATH/bin" ] && export PATH="$GOPATH/bin:$PATH"
+            export GOPATH="$PWD/depsws:$GOPATH"
         fi
+    elif [ -d "$HOME/.gows" ] ; then
+        [ -d "$HOME/.gows/bin" ] && export PATH="$HOME/.gows/bin:$PATH"
+        if [ -n "$GOPATH" ] ; then
+            [ -d "$GOPATH/bin" ] && export PATH="$GOPATH/bin:$PATH"
+            export GOPATH="$HOME/.gows:$GOPATH"
+        fi
+    elif [ -n "$GOPATH" ] ; then
+        [ -d "$GOPATH/bin" ] && export PATH="$GOPATH/bin:$PATH"
         export GOPATH
     fi
     go version

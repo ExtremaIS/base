@@ -3,7 +3,7 @@ base - base directory environment
 
 **base** creates an environment with a base directory.  Execute **base** from
 the base directory using `.` at the beginning, so that it is executed within
-your current environment, as follows::
+your current environment, as follows:
 
     $ . base [label]
 
@@ -14,13 +14,13 @@ The prompt and title of the terminal change according to what directory you
 are in.  When within the base directory, the label in brackets and the current
 path within the base directory are displayed.  For example, when in the `src`
 directory under a base environment labelled *app*, the prompt would be
-displayed as follows::
+displayed as follows:
 
     [app] /src$
 
 When outside the base directory, the label in parenthesis and the current path
 are displayed.  For example, when in the `/etc` directory outside of a base
-environment labelled *app*, the prompt would be displayed as follows::
+environment labelled *app*, the prompt would be displayed as follows:
 
     (app) /etc$
 
@@ -73,22 +73,22 @@ Installation
 **base** can be installed on Debian-based distributions using the package
 manager as follows:
 
-    $ wget http://www.extellisys.com/static/products/base_1.1.0_all.deb
-    $ sudo dpkg -i base_1.1.0_all.deb
+    $ wget http://www.extellisys.com/static/products/base_1.1.1_all.deb
+    $ sudo dpkg -i base_1.1.1_all.deb
 
 **base** can be installed on RedHat-based distributions using the package
 manager as follows:
 
-    $ wget http://www.extellisys.com/static/products/base-1.1.0-1.noarch.rpm
-    $ sudo rpm -i base-1.1.0-1.noarch.rpm
+    $ wget http://www.extellisys.com/static/products/base-1.1.1-1.noarch.rpm
+    $ sudo rpm -i base-1.1.1-1.noarch.rpm
 
-**base** can be installed from source using the following command::
+**base** can be installed from source using the following command:
 
     $ sudo make install
 
 By default, `make install` installs within `/usr/local`.  You can specify a
 different destination directory by setting the `prefix` as in the following
-example::
+example:
 
     $ sudo make prefix=/some/dir install
 
