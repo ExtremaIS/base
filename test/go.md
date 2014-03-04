@@ -192,6 +192,7 @@ depsws
 
 Run:
 
+    $ mkdir -p ~/.gows/bin
     $ mkdir -p depsws/{bin,pkg,src}
     $ . base
 
@@ -207,6 +208,26 @@ Run:
 
     $ base_deactivate
     $ rm -rf depsws
+
+.gows
+-----
+
+Run:
+
+    $ . base
+
+Select: `\n` (default)
+
+Expect:
+
+* stdout: `go version go1.2 linux/amd64`
+* `echo $GOPATH`: `~/.gows:~/tmp/basetest`
+* `echo $PATH`: `~/tmp/basetest/bin:~/.gows/bin:/usr/local/opt/go-1.2/bin:...`
+
+Run:
+
+    $ base_deactivate
+    $ rmdir ~/.gows/bin ~/.gows
 
 presets
 -------
