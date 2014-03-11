@@ -21,8 +21,9 @@
 # number, or just press enter to accept the default.  Create a soft-link in
 # the base directory called ".haskell" to a specific version to select that
 # version automatically, without prompting.  If there is only one version
-# available, it is selected without prompting.  If a .cabal-sandbox/bin
-# directory is found in the base directory, then it prepended to the PATH.
+# available, it is selected without prompting.  If a $HOME/.cabal/bin
+# directory exists, it is prepended to the PATH.  If a .cabal-sandbox/bin
+# directory is found in the base directory, then it is prepended to the PATH.
 #
 # The PATH is automatically reset when the base is deactivated.
 ##############################################################################
