@@ -1,10 +1,10 @@
 Name:       base
-Version:    1.1.1
+Version:    1.1.2
 Release:    1%{?dist}
 Summary:    base directory environment
 License:    MIT
 URL:        http://www.extellisys.com/products/base
-Source:     http://www.extellisys.com/static/products/base-1.1.1.tar.gz
+Source:     http://www.extellisys.com/static/products/base-1.1.2.tar.gz
 BuildArch:  noarch
 Requires:   bash,sed,findutils
 
@@ -33,5 +33,5 @@ rm -rf %{buildroot}
 %{_mandir}/man1/
 
 %changelog
-* Tue Mar 4 2014 Travis Cardwell <travis.cardwell@extellisys.com> 1.1.1-1
+* Tue Mar 11 2014 Travis Cardwell <travis.cardwell@extellisys.com> 1.1.2-1
 - Initial version of the package

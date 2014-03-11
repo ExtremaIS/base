@@ -73,14 +73,14 @@ Installation
 **base** can be installed on Debian-based distributions using the package
 manager as follows:
 
-    $ wget http://www.extellisys.com/static/products/base_1.1.1_all.deb
-    $ sudo dpkg -i base_1.1.1_all.deb
+    $ wget http://www.extellisys.com/static/products/base_1.1.2_all.deb
+    $ sudo dpkg -i base_1.1.2_all.deb
 
 **base** can be installed on RedHat-based distributions using the package
 manager as follows:
 
-    $ wget http://www.extellisys.com/static/products/base-1.1.1-1.noarch.rpm
-    $ sudo rpm -i base-1.1.1-1.noarch.rpm
+    $ wget http://www.extellisys.com/static/products/base-1.1.2-1.noarch.rpm
+    $ sudo rpm -i base-1.1.2-1.noarch.rpm
 
 **base** can be installed from source using the following command:
 
