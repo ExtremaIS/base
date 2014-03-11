@@ -1,3 +1,9 @@
+2014-03-11  Travis Cardwell  <travis.cardwell@extellisys.com>
+
+    * release: 1.1.2
+
+    * share/haskell.sh: insert $HOME/.cabal/bin into $PATH
+
 2014-03-04  Travis Cardwell  <travis.cardwell@extellisys.com>
 
     * release: 1.1.1

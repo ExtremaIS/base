@@ -1,3 +1,9 @@
+base (1.1.2) unstable; urgency=low
+
+  * share/haskell.sh: insert $HOME/.cabal/bin into $PATH
+
+ -- Travis Cardwell <travis.cardwell@extellisys.com>  Tue, 11 Mar 2014 10:55:00 +0900
+
 base (1.1.1) unstable; urgency=low
 
   * share/go.sh: add ~/.gows support
