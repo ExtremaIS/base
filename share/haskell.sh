@@ -46,6 +46,9 @@ _base_activate_pre() {
     if [ -n "$haskell" ] ; then
         PATH_ORIG="$PATH"
         export PATH="$haskell/bin:$PATH"
+        if [ -d "$HOME/.cabal/bin" ] ; then
+            export PATH="$HOME/.cabal/bin:$PATH"
+        fi
         if [ -d "$PWD/.cabal-sandbox/bin" ] ; then
             export PATH="$PWD/.cabal-sandbox/bin:$PATH"
         fi
