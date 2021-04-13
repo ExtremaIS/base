@@ -1,6 +1,6 @@
-# `base`
+# Base
 
-`base` configures Bash shell environments relative to a directory.  It
+Base configures Bash shell environments relative to a directory.  It
 provides an easy and consistent way to load the configuration for diverse
 projects.
 
