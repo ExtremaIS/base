@@ -536,10 +536,10 @@ class TestBase(unittest.TestCase):
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_newline_variable(self):
-        self.sendline("BASETEST_NL_VAR=$'one\\n\"two\\tthree\"\\nfour'")
+        self.sendline("BASETEST_NL_VAR=$'one\\n\"two\\'\\tthree\"\\nfour'")
         self.sendline('source base')
         self.sendline('echo "${BASETEST_NL_VAR}"')
-        self.expect_exact(b'\r\none\r\n"two\tthree"\r\nfour\r\n')
+        self.expect_exact(b"\r\none\r\n\"two'\tthree\"\r\nfour\r\n")
 
     # base_deactivate ########################################################
 

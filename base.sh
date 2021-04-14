@@ -168,16 +168,20 @@ _base_load_env () {
       else
         value="${defn#*'"'}"
         value="${value//\\'"'/'"'}"
-        defn="${defn%%=*}=\$'${value//\\/\\\\}"
+        value="${value//\\/\\\\}"
+        value="${value//"'"/\\"'"}"
+        defn="${defn%%=*}=\$'${value}"
       fi
       line="${line//\\'"'/'"'}"
+      line="${line//\\/\\\\}"
+      line="${line//"'"/\\"'"}"
       if [ "${line: -1}" == "\"" ] ; then
         line="${line%?}'"
         quoteflag=1
       else
         quoteflag=0
       fi
-      defn="${defn}\\n${line//\\/\\\\}"
+      defn="${defn}\\n${line}"
     fi
   done < <(declare -p)
   test -z "${defn}" || echo "${defn}"
