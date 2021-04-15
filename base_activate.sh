@@ -369,14 +369,14 @@ _base_label_set_default () {
 
 # ### Function `_base_select`
 #
-# This function queries the user to select an option.
+# This function prompts the user to select an option.
 #
 # An indexed list of options is displayed, and the user selects an option by
-# index.  An invalid selection results in the deafult: the first option.  The
+# index.  An invalid selection results in the default: the first option.  The
 # selected option value (not index) is stored in the `BASE_SELECTION`
 # environment variable.
 #
-# If only one option is passed, it is selected without querying the user.  If
+# If only one option is passed, it is selected without prompting the user.  If
 # no options are passed, a warning is displayed and `BASE_SELECTION` is unset.
 #
 # Arguments:
@@ -429,7 +429,7 @@ _base_select () {
 
 # ### Function `_base_select_dir`
 #
-# This function queries the user to select a directory.
+# This function prompts the user to select a directory.
 #
 # This function calls `_base_select` with directory names as options.  If no
 # directories are found, a warning is displayed.
@@ -526,7 +526,7 @@ _base_ps_update () {
   fi
 }
 
-# ### Configure prompt
+# ### Configure Prompt
 #
 # The current value of the `PS1` environment variable is saved, and the
 # `PROMPT_COMMAND` environment variable is set to `_base_ps_update`.
