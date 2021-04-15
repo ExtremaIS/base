@@ -82,7 +82,8 @@ fi
 
 # ### Sourced Execution
 #
-# When sourced, CLI arguments are processed (`CURENV_1`).
+# When sourced, CLI arguments are processed (`CURENV_1`).  If already in a
+# base environment, an error is printed and the environment is not configured.
 #
 # Environment variables:
 #
@@ -113,14 +114,16 @@ elif [ "$#" -eq "1" ] ; then
   esac
 fi
 
+unset -f _base_help
+
+if [ -n "${BASE}" ] ; then
+  echo "error: nested bases require a new Bash shell" >&2
+  unset BASE_VERSION BASE_LABEL_CLI
+  return 1
+fi
+
 # shellcheck disable=SC2034
 BASE_MODE="CURENV"
-
-# ### Cleaning
-#
-# The `_base_help` function is no longer used after this point, so it is
-# unset.
-unset -f _base_help
 
 # After this point, the base environment is configured in the current Bash
 # shell.  From the above code, only the following environment variables remain

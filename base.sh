@@ -86,6 +86,8 @@ _base_help() {
 # Environment variables:
 #
 # * `BASE_MODE` is set to `NEWENV`.
+# * `BASE_NEW` is set to indicate that a new base environment is being
+#   configured.
 # * `BASE_LABEL_CLI` is set to the label arugment when one is given.
 if [ "${BASH_SOURCE[0]}" == "${0}" ] ; then
   if [ "$#" -gt "1" ] ; then
@@ -109,6 +111,7 @@ if [ "${BASH_SOURCE[0]}" == "${0}" ] ; then
 
   exec /usr/bin/env \
     BASE_MODE="NEWENV" \
+    BASE_NEW=1 \
     bash --init-file "${BASH_SOURCE[0]}"
 
   echo "error: base unable to execute a new Bash shell" >&2
@@ -154,7 +157,7 @@ _base_load_env () {
       case "${var}" in
         BASH_* | FUNCNAME | GROUPS | cmd | val )
           ;;
-        DEMO_ENV | defcmd | defn | line | var )
+        BASE* | defcmd | defn | line | quoteflag | value | var )
           ;;
         * )
           defn="${line}"
@@ -202,8 +205,10 @@ _base_load_env () {
 # * `BASE_ENV_SER` contains the serialized configuration of the current Bash
 #   shell.  It is passed to the new process.
 # * `BASE_MODE` is set to `CPYENV`.
+# * `BASE_NEW` is set to indicate that a new base environment is being
+#   configured.
 # * `BASE_LABEL_CLI` is set to the label arugment when one is given.
-if [[ -z "${BASE_MODE}" && -z "${BASE_ENV_SER}" ]] ; then
+if [ -z "${BASE_NEW+x}" ] ; then
   if [ "$#" -gt "1" ] ; then
     _base_help >&2
     unset -f _base_help _base_load_env
@@ -238,6 +243,7 @@ if [[ -z "${BASE_MODE}" && -z "${BASE_ENV_SER}" ]] ; then
   /usr/bin/env \
     BASE_ENV_SER="$(declare -p BASE_ENV)" \
     BASE_MODE="CPYENV" \
+    BASE_NEW=1 \
     bash --init-file "${BASH_SOURCE[0]}"
 
   unset BASE_VERSION BASE_ENV
@@ -247,9 +253,10 @@ fi
 # ### Cleaning
 #
 # Only the new Bash shell process executes code after this point.  The
-# `_base_help` and `_base_load_env` function are no longer used, so they are
-# unset.
+# `_base_help` and `_base_load_env` functions and `BASE_NEW` environment
+# variable are no longer used, so they are unset.
 unset -f _base_help _base_load_env
+unset BASE_NEW
 
 # ### Function `_base_restore_env`
 #

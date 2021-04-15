@@ -40,13 +40,12 @@ an easy and consistent way to load the configuration for diverse projects.
 # Usage
 
 Change to the directory that you would like to use as the "base directory" and
-run Base in one of the three following ways:
+run base in one of the three following ways:
 
 `base` [*label*]
 :   When you run `base` normally, the base environment is configured in a new
     Bash shell.  Only environment variables that are exported in the parent
-    shell are propagated.  `${HOME}/.bashrc` is sourced if it exists.  Note
-    that nested Base environments must be created using this method.
+    shell are propagated.  `${HOME}/.bashrc` is sourced if it exists.
 
 `. base` [*label*]
 :   When you source `base`, the base enviornment is configured in a new Bash
@@ -55,7 +54,8 @@ run Base in one of the three following ways:
 
 `. base_activate` [*label*]
 :   When you source `base_activate`, the base environment is configured in the
-    current Bash shell.
+    current Bash shell.  Note that this method cannot be used to create a
+    nested base environment.
 
 The base label, displayed in the prompt and title, may be configured in the
 following ways:
@@ -123,12 +123,12 @@ The file(s)/link(s) are sourced (in sorted order) during base environment
 configuration.  Configuration should support deactivation by using the
 functions below.
 
-Scripts that are included with Base can be found in `/usr/share/base`.
+Scripts that are included with base can be found in `/usr/share/base`.
 
 The following environment variables are available:
 
 `BASE_VERSION`
-:   This variable is set to the Base version.
+:   This variable is set to the base version.
 
 `BASE_MODE`
 :   This variable indicates the way that the base environment is being

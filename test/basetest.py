@@ -384,6 +384,67 @@ class TestBase(unittest.TestCase):
         self.assertNotFound('BASE_VERSION')
         self.assertEqual(self.getPID(), pid_initial)
 
+    # nested bases ###########################################################
+
+    def test_base_nested(self):
+        self.sendline('cd /usr')
+        self.assertUserPrompt()
+        pid_initial = self.getPID()
+        self.sendline('base')
+        self.assertBasePrompt(b'usr', b'')
+        pid_base1 = self.getPID()
+        self.assertBasePrompt(b'usr', b'')
+        self.assertNotEqual(pid_base1, pid_initial)
+        self.sendline('cd local')
+        self.assertBasePrompt(b'usr', b'local')
+        self.sendline('base')
+        self.assertBasePrompt(b'local', b'')
+        pid_base2 = self.getPID()
+        self.assertBasePrompt(b'local', b'')
+        self.assertNotEqual(pid_base2, pid_base1)
+        self.assertNotEqual(pid_base2, pid_initial)
+        self.sendline('exit')
+        self.assertBasePrompt(b'usr', b'local')
+        self.assertEqual(self.getPID(), pid_base1)
+        self.sendline('exit')
+        self.assertUserPrompt()
+        self.assertEqual(self.getPID(), pid_initial)
+
+    def test_source_base_nested(self):
+        self.sendline('cd /usr')
+        self.assertUserPrompt()
+        pid_initial = self.getPID()
+        self.sendline('source base')
+        self.assertBasePrompt(b'usr', b'')
+        pid_base1 = self.getPID()
+        self.assertBasePrompt(b'usr', b'')
+        self.assertNotEqual(pid_base1, pid_initial)
+        self.sendline('cd local')
+        self.assertBasePrompt(b'usr', b'local')
+        self.sendline('source base')
+        self.assertBasePrompt(b'local', b'')
+        pid_base2 = self.getPID()
+        self.assertBasePrompt(b'local', b'')
+        self.assertNotEqual(pid_base2, pid_base1)
+        self.assertNotEqual(pid_base2, pid_initial)
+        self.sendline('exit')
+        self.assertBasePrompt(b'usr', b'local')
+        self.assertEqual(self.getPID(), pid_base1)
+        self.sendline('exit')
+        self.assertUserPrompt()
+        self.assertEqual(self.getPID(), pid_initial)
+
+    def test_source_base_activate_nested(self):
+        self.sendline('cd /usr')
+        self.assertUserPrompt()
+        pid_initial = self.getPID()
+        self.sendline('source base_activate')
+        self.assertBasePrompt(b'usr', b'')
+        self.assertEqual(self.getPID(), pid_initial)
+        self.sendline('source base_activate')
+        self.expect_exact(
+            b'\r\nerror: nested bases require a new Bash shell\r\n')
+
     # BASE_VERSION environment variable ######################################
 
     def test_base_version_variable(self):
