@@ -1,6 +1,7 @@
 ##############################################################################
 # Project configuration
 
+PROJECT      := base
 DOCKER_IMAGE := extremais/basetest
 
 ##############################################################################
@@ -22,11 +23,13 @@ MAKEFLAGS += --warn-undefined-variables
 ##############################################################################
 # Rules
 
+clean: # clean package and remove artifacts
+> @rm -rf build
+.PHONY: clean
+
 #deb: TODO
 
 #doc: TODO
-
-#clean: TODO
 
 help: # show this help
 > @grep '^[a-zA-Z0-9._-]\+:[^#]*# ' $(MAKEFILE_LIST) \
@@ -71,7 +74,12 @@ pylint: # run pylint on basetest.py
 >   fi
 .PHONY: pylint
 
-#recent: TODO
+recent: # show N most recently modified files
+> $(eval N := "10")
+> @find . -not -path '*/\.*' -type f -printf '%T+ %p\n' \
+>   | sort --reverse \
+>   | head -n $(N)
+.PHONY: recent
 
 #rpm: TODO
 
@@ -83,9 +91,45 @@ shellcheck: # run shellcheck on base
 >   fi
 .PHONY: shellcheck
 
-#source-git: TODO
+source-git: # create source tarball of git TREE
+> $(eval TREE := "HEAD")
+> $(eval BRANCH := $(shell git rev-parse --abbrev-ref $(TREE)))
+> @test "$(BRANCH)" = "main" || echo "WARNING: Not in main branch!" >&2
+> $(eval DIRTY := $(shell git diff --shortstat | wc -l))
+> @test "$(DIRTY)" = "0" \
+>   || echo "WARNING: Not including non-committed changes!" >&2
+> $(eval UNTRACKED := $(shell \
+    git ls-files --other --directory --no-empty-directory --exclude-standard \
+    | wc -l))
+> @test "$(UNTRACKED)" = "0" \
+>   || echo "WARNING: Not including untracked files!" >&2
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> @mkdir -p build
+> @git archive --format=tar --prefix=$(PROJECT)-$(VERSION)/ $(TREE) \
+>   | xz \
+>   > build/$(PROJECT)-$(VERSION).tar.xz
+.PHONY: source-git
 
-#source-tar: TODO
+source-tar: # create source tarball using tar
+> $(eval DIRTY := $(shell git diff --shortstat | wc -l))
+> @test "$(DIRTY)" = "0" \
+>   || echo "WARNING: Including non-committed changes!" >&2
+> $(eval UNTRACKED := $(shell \
+    git ls-files --other --directory --no-empty-directory --exclude-standard \
+    | wc -l))
+> @test "$(UNTRACKED)" = "0" \
+>   || echo "WARNING: Including untracked files!" >&2
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> @mkdir -p build
+> @sed -e 's,^/,./,' -e 's,/$$,,' .gitignore > build/.gitignore
+> @tar \
+>   --exclude-vcs \
+>   --exclude-ignore-recursive=build/.gitignore \
+>   --transform "s,^\.,$(PROJECT)-$(VERSION)," \
+>   -Jcf build/$(PROJECT)-$(VERSION).tar.xz \
+>   .
+> @rm -f build/.gitignore
+.PHONY: source-tar
 
 test: hr
 test: test-image
@@ -130,7 +174,16 @@ test-shell: # run shell in test container
 >   /bin/bash
 .PHONY: test-shell
 
-#todo: TODO
+todo: # search for TODO items
+> @find . -type f \
+>   -not -path '*/\.*' \
+>   -not -path './build/*' \
+>   -not -path './project/*' \
+>   -not -path ./Makefile \
+>   | xargs grep -Hn TODO \
+>   | grep -v '^Binary file ' \
+>   || true
+.PHONY: todo
 
 version: # show current version
 > @./base.sh --version
