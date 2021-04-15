@@ -544,62 +544,62 @@ class TestBase(unittest.TestCase):
     # environment variables ##################################################
 
     def test_base_exported_variable(self):
-        self.sendline('export BASETEST_EXP_VAR=foo')
+        self.sendline('export TEST_EXP_VAR=foo')
         self.sendline('base')
-        self.sendline('echo "${BASETEST_EXP_VAR}"')
+        self.sendline('echo "${TEST_EXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
         self.sendline('exit')
-        self.sendline('echo "${BASETEST_EXP_VAR}"')
+        self.sendline('echo "${TEST_EXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_exported_variable(self):
-        self.sendline('export BASETEST_EXP_VAR=foo')
+        self.sendline('export TEST_EXP_VAR=foo')
         self.sendline('source base')
-        self.sendline('echo "${BASETEST_EXP_VAR}"')
+        self.sendline('echo "${TEST_EXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
         self.sendline('exit')
-        self.sendline('echo "${BASETEST_EXP_VAR}"')
+        self.sendline('echo "${TEST_EXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_activate_exported_variable(self):
-        self.sendline('export BASETEST_EXP_VAR=foo')
+        self.sendline('export TEST_EXP_VAR=foo')
         self.sendline('source base_activate')
-        self.sendline('echo "${BASETEST_EXP_VAR}"')
+        self.sendline('echo "${TEST_EXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
         self.sendline('base_deactivate')
-        self.sendline('echo "${BASETEST_EXP_VAR}"')
+        self.sendline('echo "${TEST_EXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_base_non_exported_variable(self):
-        self.sendline('BASETEST_NONEXP_VAR=foo')
+        self.sendline('TEST_NONEXP_VAR=foo')
         self.sendline('base')
-        self.assertNotFound('BASETEST_NONEXP_VAR')
+        self.assertNotFound('TEST_NONEXP_VAR')
         self.sendline('exit')
-        self.sendline('echo "${BASETEST_NONEXP_VAR}"')
+        self.sendline('echo "${TEST_NONEXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_non_exported_variable(self):
-        self.sendline('BASETEST_NONEXP_VAR=foo')
+        self.sendline('TEST_NONEXP_VAR=foo')
         self.sendline('source base')
-        self.sendline('echo "${BASETEST_NONEXP_VAR}"')
+        self.sendline('echo "${TEST_NONEXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
         self.sendline('exit')
-        self.sendline('echo "${BASETEST_NONEXP_VAR}"')
+        self.sendline('echo "${TEST_NONEXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_activate_non_exported_variable(self):
-        self.sendline('BASETEST_NONEXP_VAR=foo')
+        self.sendline('TEST_NONEXP_VAR=foo')
         self.sendline('source base_activate')
-        self.sendline('echo "${BASETEST_NONEXP_VAR}"')
+        self.sendline('echo "${TEST_NONEXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
         self.sendline('base_deactivate')
-        self.sendline('echo "${BASETEST_NONEXP_VAR}"')
+        self.sendline('echo "${TEST_NONEXP_VAR}"')
         self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_newline_variable(self):
-        self.sendline("BASETEST_NL_VAR=$'one\\n\"two\\'\\tthree\"\\nfour'")
+        self.sendline("TEST_NL_VAR=$'one\\n\"two\\'\\tthree\"\\nfour'")
         self.sendline('source base')
-        self.sendline('echo "${BASETEST_NL_VAR}"')
+        self.sendline('echo "${TEST_NL_VAR}"')
         self.expect_exact(b"\r\none\r\n\"two'\tthree\"\r\nfour\r\n")
 
     # base_deactivate ########################################################
@@ -1411,52 +1411,52 @@ class TestBase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_deprj () { unset BASETEST_INT ; }')
+                outfile.write('_deprj () { unset TEST_INT ; }')
                 outfile.write('_base_deactivation_callback_register _deprj')
             self.sendline(f'cd {tempdir}')
             self.assertUserPrompt()
             self.sendline('base')
             self.assertBasePrompt(tempdir_name, b'')
-            self.sendline('export BASETEST_INT=foo')
-            self.sendline('echo "${BASETEST_INT}"')
+            self.sendline('export TEST_INT=foo')
+            self.sendline('echo "${TEST_INT}"')
             self.expect_exact(b'\r\nfoo\r\n')
             self.sendline('exit')
             self.assertUserPrompt()
-            self.assertNotFound('BASETEST_INT')
+            self.assertNotFound('TEST_INT')
 
     def test_source_base_deactivation_callback_register(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_deprj () { unset BASETEST_INT ; }')
+                outfile.write('_deprj () { unset TEST_INT ; }')
                 outfile.write('_base_deactivation_callback_register _deprj')
             self.sendline(f'cd {tempdir}')
             self.assertUserPrompt()
             self.sendline('source base')
             self.assertBasePrompt(tempdir_name, b'')
-            self.sendline('export BASETEST_INT=foo')
-            self.sendline('echo "${BASETEST_INT}"')
+            self.sendline('export TEST_INT=foo')
+            self.sendline('echo "${TEST_INT}"')
             self.expect_exact(b'\r\nfoo\r\n')
             self.sendline('exit')
             self.assertUserPrompt()
-            self.assertNotFound('BASETEST_INT')
+            self.assertNotFound('TEST_INT')
 
     def test_source_base_activate_deactivation_callback_register(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_deprj () { unset BASETEST_INT ; }')
+                outfile.write('_deprj () { unset TEST_INT ; }')
                 outfile.write('_base_deactivation_callback_register _deprj')
             self.sendline(f'cd {tempdir}')
             self.assertUserPrompt()
             self.sendline('source base_activate')
             self.assertBasePrompt(tempdir_name, b'')
-            self.sendline('export BASETEST_INT=foo')
-            self.sendline('echo "${BASETEST_INT}"')
+            self.sendline('export TEST_INT=foo')
+            self.sendline('echo "${TEST_INT}"')
             self.expect_exact(b'\r\nfoo\r\n')
             self.sendline('base_deactivate')
             self.assertUserPrompt()
-            self.assertNotFound('BASETEST_INT')
+            self.assertNotFound('TEST_INT')
 
     # _base_var_set ##########################################################
 
@@ -1464,40 +1464,40 @@ class TestBase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_base_var_set BASETEST_SET_VAR foo')
+                outfile.write('_base_var_set TEST_SET_VAR foo')
             self.sendline(f'cd {tempdir}')
             self.assertUserPrompt()
             self.sendline('base')
             self.assertBasePrompt(tempdir_name, b'')
-            self.sendline('echo "${BASETEST_SET_VAR}"')
+            self.sendline('echo "${TEST_SET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_var_set(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_base_var_set BASETEST_SET_VAR foo')
+                outfile.write('_base_var_set TEST_SET_VAR foo')
             self.sendline(f'cd {tempdir}')
             self.assertUserPrompt()
             self.sendline('source base')
             self.assertBasePrompt(tempdir_name, b'')
-            self.sendline('echo "${BASETEST_SET_VAR}"')
+            self.sendline('echo "${TEST_SET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_activate_var_set(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_base_var_set BASETEST_SET_VAR foo')
+                outfile.write('_base_var_set TEST_SET_VAR foo')
             self.sendline(f'cd {tempdir}')
             self.assertUserPrompt()
             self.sendline('source base_activate')
             self.assertBasePrompt(tempdir_name, b'')
-            self.sendline('echo "${BASETEST_SET_VAR}"')
+            self.sendline('echo "${TEST_SET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
             self.sendline('base_deactivate')
             self.assertUserPrompt()
-            self.assertNotFound('BASETEST_SET_VAR')
+            self.assertNotFound('TEST_SET_VAR')
 
     # _base_var_unset ########################################################
 
@@ -1505,42 +1505,42 @@ class TestBase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_base_var_unset BASETEST_UNSET_VAR')
-            self.sendline('export BASETEST_UNSET_VAR=foo')
+                outfile.write('_base_var_unset TEST_UNSET_VAR')
+            self.sendline('export TEST_UNSET_VAR=foo')
             self.sendline(f'cd {tempdir}')
             self.sendline('base')
             self.assertBasePrompt(tempdir_name, b'')
-            self.assertNotFound('BASETEST_UNSET_VAR')
+            self.assertNotFound('TEST_UNSET_VAR')
             self.sendline('exit')
-            self.sendline('echo "${BASETEST_UNSET_VAR}"')
+            self.sendline('echo "${TEST_UNSET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_var_unset(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_base_var_unset BASETEST_UNSET_VAR')
-            self.sendline('export BASETEST_UNSET_VAR=foo')
+                outfile.write('_base_var_unset TEST_UNSET_VAR')
+            self.sendline('export TEST_UNSET_VAR=foo')
             self.sendline(f'cd {tempdir}')
             self.sendline('source base')
             self.assertBasePrompt(tempdir_name, b'')
-            self.assertNotFound('BASETEST_UNSET_VAR')
+            self.assertNotFound('TEST_UNSET_VAR')
             self.sendline('exit')
-            self.sendline('echo "${BASETEST_UNSET_VAR}"')
+            self.sendline('echo "${TEST_UNSET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_activate_var_unset(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir_name = os.path.basename(tempdir).encode()
             with open(os.path.join(tempdir, '.base'), 'w') as outfile:
-                outfile.write('_base_var_unset BASETEST_UNSET_VAR')
-            self.sendline('export BASETEST_UNSET_VAR=foo')
+                outfile.write('_base_var_unset TEST_UNSET_VAR')
+            self.sendline('export TEST_UNSET_VAR=foo')
             self.sendline(f'cd {tempdir}')
             self.sendline('source base_activate')
             self.assertBasePrompt(tempdir_name, b'')
-            self.assertNotFound('BASETEST_UNSET_VAR')
+            self.assertNotFound('TEST_UNSET_VAR')
             self.sendline('base_deactivate')
-            self.sendline('echo "${BASETEST_UNSET_VAR}"')
+            self.sendline('echo "${TEST_UNSET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     # _base_label_set ########################################################
@@ -1650,13 +1650,13 @@ class TestBase(unittest.TestCase):
             basedir = os.path.join(tempdir, '.base')
             mkdir_p(basedir)
             with open(os.path.join(basedir, 'var'), 'w') as outfile:
-                outfile.write('_base_var_set BASETEST_SET_VAR foo')
+                outfile.write('_base_var_set TEST_SET_VAR foo')
             with open(os.path.join(basedir, 'label'), 'w') as outfile:
                 outfile.write('_base_label_set_default project')
             self.sendline(f'cd {tempdir}')
             self.sendline('base')
             self.assertBasePrompt(b'project', b'')
-            self.sendline('echo "${BASETEST_SET_VAR}"')
+            self.sendline('echo "${TEST_SET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_directory(self):
@@ -1664,13 +1664,13 @@ class TestBase(unittest.TestCase):
             basedir = os.path.join(tempdir, '.base')
             mkdir_p(basedir)
             with open(os.path.join(basedir, 'var'), 'w') as outfile:
-                outfile.write('_base_var_set BASETEST_SET_VAR foo')
+                outfile.write('_base_var_set TEST_SET_VAR foo')
             with open(os.path.join(basedir, 'label'), 'w') as outfile:
                 outfile.write('_base_label_set_default project')
             self.sendline(f'cd {tempdir}')
             self.sendline('source base')
             self.assertBasePrompt(b'project', b'')
-            self.sendline('echo "${BASETEST_SET_VAR}"')
+            self.sendline('echo "${TEST_SET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     def test_source_base_activate_directory(self):
@@ -1678,13 +1678,13 @@ class TestBase(unittest.TestCase):
             basedir = os.path.join(tempdir, '.base')
             mkdir_p(basedir)
             with open(os.path.join(basedir, 'var'), 'w') as outfile:
-                outfile.write('_base_var_set BASETEST_SET_VAR foo')
+                outfile.write('_base_var_set TEST_SET_VAR foo')
             with open(os.path.join(basedir, 'label'), 'w') as outfile:
                 outfile.write('_base_label_set_default project')
             self.sendline(f'cd {tempdir}')
             self.sendline('source base_activate')
             self.assertBasePrompt(b'project', b'')
-            self.sendline('echo "${BASETEST_SET_VAR}"')
+            self.sendline('echo "${TEST_SET_VAR}"')
             self.expect_exact(b'\r\nfoo\r\n')
 
     # python-virtualenv ######################################################
