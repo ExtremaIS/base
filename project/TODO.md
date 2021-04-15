@@ -4,8 +4,6 @@
 
 ## Documentation
 
-* Write new manual
-
 ### README
 
 * Examples
