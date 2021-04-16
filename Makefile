@@ -51,8 +51,7 @@ lint: # run shellcheck, pycodestyle, and pylint
 man: # build man page
 > $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
 > $(eval DATE := $(shell date --rfc-3339=date))
-> @mkdir -p build
-> @pandoc -s -t man -o build/base.1 \
+> @pandoc -s -t man -o doc/base.1 \
 >   --variable header="Base Manual" \
 >   --variable footer="Base $(VERSION) ($(DATE))" \
 >   doc/base.1.md
