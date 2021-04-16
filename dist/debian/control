@@ -1,0 +1,13 @@
+Source: base
+Section: devel
+Priority: optional
+Maintainer: Travis Cardwell <travis.cardwell@extrema.is>
+Standards-Version: 3.9.8
+Vcs-Git: git://github.com/ExtremaIS/base.git
+Vcs-browser: https://github.com/ExtremaIS/base
+Homepage: https://github.com/ExtremaIS/base#base
+
+Package: base
+Architecture: all
+Depends: bash (>= 4), findutils (>= 4)
+Description: Configure Bash shell environments relative to a directory

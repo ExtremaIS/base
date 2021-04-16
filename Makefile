@@ -4,6 +4,9 @@
 PROJECT      := base
 DOCKER_IMAGE := extremais/basetest
 
+MAINTAINER_NAME  = Travis Cardwell
+MAINTAINER_EMAIL = travis.cardwell@extrema.is
+
 ##############################################################################
 # Make configuration
 
@@ -21,13 +24,52 @@ MAKEFLAGS += --warn-undefined-variables
 .DEFAULT_GOAL := help
 
 ##############################################################################
+# Functions
+
+define checksum_files
+  find . -maxdepth 1 -type f -not -path './*SUMS' | sed 's,^\./,,' | sort
+endef
+
+define die
+  (echo "error: $(1)" ; false)
+endef
+
+##############################################################################
 # Rules
+
+checksums: # calculate checksums of build artifacts
+> @cd build && $(call checksum_files) | xargs md5sum > MD5SUMS
+> @cd build && $(call checksum_files) | xargs sha1sum > SHA1SUMS
+> @cd build && $(call checksum_files) | xargs sha256sum > SHA256SUMS
+> @cd build && $(call checksum_files) | xargs sha512sum > SHA512SUMS
+.PHONY: checksums
 
 clean: # clean package and remove artifacts
 > @rm -rf build
 .PHONY: clean
 
-#deb: TODO
+deb: # build .deb package for VERSION in a Debian container
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval SRC := "base-$(VERSION).tar.xz")
+> @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
+> @docker run --rm -it \
+>   -e DEBFULLNAME="$(MAINTAINER_NAME)" \
+>   -e DEBEMAIL="$(MAINTAINER_EMAIL)" \
+>   -v $(PWD)/dist/debian/make-base-deb.sh:/root/make-base-deb.sh:ro \
+>   -v $(PWD)/build:/host \
+>   debian:buster \
+>   /root/make-base-deb.sh "$(SRC)"
+.PHONY: deb
+
+deb-test: # run a Debian container to test .deb package for VERSION
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval PKG := "base_$(VERSION)-1_all.deb")
+> @test -f build/$(PKG) || $(call die,"build/$(PKG) not found")
+> @docker run --rm -it \
+>   -v $(PWD)/build/$(PKG):/tmp/$(PKG):ro \
+>   debian:buster \
+>   /bin/bash
+.PHONY: deb-test
 
 #doc: TODO
 
@@ -83,7 +125,7 @@ recent: # show N most recently modified files
 #rpm: TODO
 
 shellcheck: hr
-shellcheck: # run shellcheck on base
+shellcheck: # run shellcheck on all shell scripts
 > @if command -v shellcheck >/dev/null 2>&1; \
 >   then find . -type f -name '*.sh' | xargs shellcheck; \
 >   else echo "WARNING: shellcheck not found; skipping"; \
