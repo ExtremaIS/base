@@ -55,7 +55,7 @@ deb: # build .deb package for VERSION in a Debian container
 > @docker run --rm -it \
 >   -e DEBFULLNAME="$(MAINTAINER_NAME)" \
 >   -e DEBEMAIL="$(MAINTAINER_EMAIL)" \
->   -v $(PWD)/dist/debian/make-base-deb.sh:/root/make-base-deb.sh:ro \
+>   -v $(PWD)/dist/deb/make-base-deb.sh:/root/make-base-deb.sh:ro \
 >   -v $(PWD)/build:/host \
 >   debian:buster \
 >   /root/make-base-deb.sh "$(SRC)"

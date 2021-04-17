@@ -78,9 +78,9 @@ cd "debian"
 rm -rf README.* base* ./*.ex source
 sed -i "s/^  \\*.*/  * Release ${base_version}/" changelog
 cd ..
-cp dist/debian/control debian
-cp dist/debian/copyright debian
-cp dist/debian/Makefile .
+cp dist/deb/control debian
+cp dist/deb/copyright debian
+cp dist/deb/Makefile .
 dpkg-buildpackage -us -uc
 cd "/tmp"
 rm -rf "${base_dir}"
