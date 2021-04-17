@@ -7,6 +7,14 @@ DOCKER_IMAGE := extremais/basetest
 MAINTAINER_NAME  = Travis Cardwell
 MAINTAINER_EMAIL = travis.cardwell@extrema.is
 
+DESTDIR     ?=
+PREFIX      ?= $(DESTDIR)/usr/local
+bindir      ?= $(PREFIX)/bin
+datarootdir ?= $(PREFIX)/share
+sharedir    ?= $(datarootdir)/base
+docdir      ?= $(datarootdir)/doc/base
+man1dir     ?= $(datarootdir)/man/man1
+
 ##############################################################################
 # Make configuration
 
@@ -82,6 +90,41 @@ help: # show this help
 hr: #internal# display a horizontal rule
 > @command -v hr >/dev/null 2>&1 && hr -t || true
 .PHONY: hr
+
+install: install-bin
+install: install-share
+install: install-man
+install: install-doc
+install: # install everything to PREFIX
+.PHONY: install
+
+install-bin: # install base scripts to PREFIX/bin
+> @test ! -e "$(bindir)/base" || rm -i "$(bindir)/base"
+> @test ! -e "$(bindir)/base" || $(call die,"$(bindir)/base already exists")
+> @test ! -e "$(bindir)/base_activate" || rm -i "$(bindir)/base_activate"
+> @test ! -e "$(bindir)/base_activate" \
+>   || $(call die,"$(bindir)/base_activate already exists")
+> @mkdir -p "$(bindir)"
+> @install -m 0755 base.sh "$(bindir)/base"
+> @install -m 0755 base_activate.sh "$(bindir)/base_activate"
+.PHONY: install-bin
+
+install-doc: # install documentation to PREFIX/share/doc/base"
+> @mkdir -p "$(docdir)"
+> @install -m 0644 -T <(gzip -c README.md) "$(docdir)/README.md.gz"
+> @install -m 0644 -T <(gzip -c CHANGELOG.md) "$(docdir)/changelog.gz"
+> @install -m 0644 -T <(gzip -c LICENSE) "$(docdir)/LICENSE.gz"
+.PHONY: install-doc
+
+install-man: # install manual to PREFIX/share/man/man1
+> @mkdir -p "$(man1dir)"
+> @install -m 0644 -T <(gzip -c doc/base.1) "$(man1dir)/base.1.gz"
+.PHONY: install-man
+
+install-share: # install share scripts to PREFIX/share/base
+> @mkdir -p "$(sharedir)"
+> @install -m 0644 share/* "$(sharedir)"
+.PHONY: install-share
 
 lint: hr
 lint: shellcheck
