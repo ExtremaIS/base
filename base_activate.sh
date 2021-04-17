@@ -419,8 +419,8 @@ _base_select () {
     (( idx++ ))
   done
   read -rp "Select ${1} [1]: " idx
-  idx="$(echo "${idx}" | grep "^[0-9]\+$")"
-  if [[ "${idx}" != "" && "${idx}" -gt "0" && "${idx}" -lt "${len}" ]] ; then
+  if [[ "${idx}" =~ ^[0-9]+$ && \
+      "${idx}" -gt "0" && "${idx}" -lt "${len}" ]] ; then
     BASE_SELECTION="${args[${idx}]}"
     return 0
   fi
