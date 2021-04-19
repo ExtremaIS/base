@@ -118,6 +118,44 @@ if [ "${BASH_SOURCE[0]}" == "${0}" ] ; then
   exit 1
 fi
 
+# ### Function `_base_select_env`
+#
+# This function selects a list of environment variable names to be copied to
+# the new Bash shell process when sourcing this script.
+#
+# The output of `declare -p` may contain newlines, so this function outputs
+# variable names that occur in `declare` syntax following a newline in the
+# value of an environment variable.  This causes two issues:
+#
+# * Some variable names that are output may not actually exist.  This issue is
+#   resolved by simply ignoring the variables that do not exist.
+# * Some variable names may be output more than once.  This issue is resolved
+#   by filtering the list through `sort -u`.
+#
+# Note that some environment variables that should not be copied are filtered
+# from the output.
+#
+# Side effects:
+#
+# * This function prints to `STDOUT`.
+_base_select_env () {
+  local defn line var
+  while IFS=$'\n' read -r line ; do
+    if [[ "${line}" =~ ^declare\ - ]] ; then
+      defn="${line#declare -* }"
+      var="${defn%%=*}"
+      case "${var}" in
+        BASH_* | FUNCNAME | GROUPS | cmd | val  | \
+        BASE* | decl | defn | line | var )
+          ;;
+        * )
+          echo "${var}"
+          ;;
+      esac
+    fi
+  done < <(declare -p)
+}
+
 # ### Function `_base_load_env`
 #
 # This function queries the current Bash shell environment and outputs
@@ -129,65 +167,22 @@ fi
 # processed specially.  This implementation does so within Bash to avoid
 # creating too many processes.
 #
-# The `declare` commands for environment variables with a value that includes
-# a newline must be modified so that they can be evaluated correctly.  The
-# command is transformed from a double-quoted value (`"..."`) to an
-# escape-quoted value (`$'...'`).  Existing backslashes and newlines are
-# escaped.
-#
-# Note that this implementation does correctly handle strings that contain
-# `declare` syntax after a newline character in a value.
-#
-# Note that some environment variables that should not be copied are filtered
-# from the output.
-#
 # Side effects:
 #
 # * This function prints to `STDOUT`.
 _base_load_env () {
-  local defcmd defn line quoteflag value var
-  while IFS=$'\n' read -r line ; do
-    if [[ "${line}" =~ ^declare ]] ; then
-      if [ -n "${defn}" ] ; then
-        echo "${defn}"
-        defn=""
-      fi
-      defcmd="${line#declare -* }"
-      var="${defcmd%%=*}"
-      case "${var}" in
-        BASH_* | FUNCNAME | GROUPS | cmd | val )
-          ;;
-        BASE* | defcmd | defn | line | quoteflag | value | var )
-          ;;
-        * )
-          defn="${line}"
-          ;;
-      esac
-    else
-      if [[ "${defn}" =~ ^[^=]*=\$ ]] ; then
-        if [ "${quoteflag}" -eq 1 ] ; then
-          defn="${defn%"'"}\""
-        fi
+  local decl line var
+  while IFS=$'\n' read -r var ; do
+    decl=""
+    while IFS=$'\n' read -r line ; do
+      if [ -z "${decl}" ] ; then
+        decl="${line}"
       else
-        value="${defn#*'"'}"
-        value="${value//\\'"'/'"'}"
-        value="${value//\\/\\\\}"
-        value="${value//"'"/\\"'"}"
-        defn="${defn%%=*}=\$'${value}"
+        decl="${decl}\"\$'\\n'\"${line}"
       fi
-      line="${line//\\'"'/'"'}"
-      line="${line//\\/\\\\}"
-      line="${line//"'"/\\"'"}"
-      if [ "${line: -1}" == "\"" ] ; then
-        line="${line%?}'"
-        quoteflag=1
-      else
-        quoteflag=0
-      fi
-      defn="${defn}\\n${line}"
-    fi
-  done < <(declare -p)
-  test -z "${defn}" || echo "${defn}"
+    done < <(declare -p "${var}" 2>/dev/null)
+    [ -z "${decl}" ] || echo "${decl}"
+  done < <(_base_select_env | sort -u)
   alias -p
 }
 
@@ -211,20 +206,20 @@ _base_load_env () {
 if [ -z "${BASE_NEW+x}" ] ; then
   if [ "$#" -gt "1" ] ; then
     _base_help >&2
-    unset -f _base_help _base_load_env
+    unset -f _base_help _base_select_env _base_load_env
     unset BASE_VERSION
     return 2
   elif [ "$#" -eq "1" ] ; then
     case "${1}" in
       "--version" )
         echo "base ${BASE_VERSION}"
-        unset -f _base_help _base_load_env
+        unset -f _base_help _base_select_env _base_load_env
         unset BASE_VERSION
         return 0
         ;;
       "--help" )
         _base_help
-        unset -f _base_help _base_load_env
+        unset -f _base_help _base_select_env _base_load_env
         unset BASE_VERSION
         return 0
         ;;
@@ -238,7 +233,7 @@ if [ -z "${BASE_NEW+x}" ] ; then
 
   declare -a BASE_ENV
   readarray -t BASE_ENV < <(_base_load_env)
-  unset -f _base_load_env
+  unset -f _base_select_env _base_load_env
 
   /usr/bin/env \
     BASE_ENV_SER="$(declare -p BASE_ENV)" \
@@ -252,10 +247,10 @@ fi
 
 # ### Cleaning
 #
-# Only the new Bash shell process executes code after this point.  The
-# `_base_help` and `_base_load_env` functions and `BASE_NEW` environment
-# variable are no longer used, so they are unset.
-unset -f _base_help _base_load_env
+# Only the new Bash shell process executes code after this point.  The above
+# functions and `BASE_NEW` environment variable are no longer used, so they
+# are unset.
+unset -f _base_help _base_select_env _base_load_env
 unset BASE_NEW
 
 # ### Function `_base_restore_env`
@@ -291,7 +286,7 @@ _base_restore_env () {
 #
 # When sourced, the new Bash shell is initialized by evaluating the serialized
 # configuration commands, restoring the array, and then evaluating the
-# commands selected by the `_demo_restore_env` function.  Note that this
+# commands selected by the `_base_restore_env` function.  Note that this
 # evaluation cannot be done within a function, where the declarations would
 # create variables local to the function.  The configuration environment
 # variables are not longer used, so they are unset.
