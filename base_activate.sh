@@ -19,7 +19,7 @@
 # 1. (`CURENV_1`) CLI arguments are processed.
 # 2. (`CURENV_2`) The environment is configured.
 # 3. (`CURENV_3`) The user uses the interactive shell.
-# 4. (`CURENV_4`) The user deactivates the base configuration.
+# 4. (`CURENV_4`) The user deactivates the Base configuration.
 #
 # It is best to read this script from top to bottom since execution order is
 # relevant.
@@ -83,7 +83,7 @@ fi
 # ### Sourced Execution
 #
 # When sourced, CLI arguments are processed (`CURENV_1`).  If already in a
-# base environment, an error is printed and the environment is not configured.
+# Base environment, an error is printed and the environment is not configured.
 #
 # Environment variables:
 #
@@ -117,7 +117,7 @@ fi
 unset -f _base_help
 
 if [ -n "${BASE}" ] ; then
-  echo "error: nested bases require a new Bash shell" >&2
+  echo "error: nested Bases require a new Bash shell" >&2
   unset BASE_VERSION BASE_LABEL_CLI
   return 1
 fi
@@ -125,7 +125,7 @@ fi
 # shellcheck disable=SC2034
 BASE_MODE="CURENV"
 
-# After this point, the base environment is configured in the current Bash
+# After this point, the Base environment is configured in the current Bash
 # shell.  From the above code, only the following environment variables remain
 # set:
 #
@@ -324,18 +324,18 @@ _base_var_unset () {
 ##############################################################################
 # ## Label Management
 #
-# The label management API provides a way to set the base label.
+# The label management API provides a way to set the Base label.
 #
 # The label management API is only available during environment configuration
 # (`CURENV_2`).
 
 # ### Function `_base_label_set`
 #
-# This function sets the base label.
+# This function sets the Base label.
 #
 # Arguments:
 #
-# * `LABEL` (string): new base label
+# * `LABEL` (string): new Base label
 #
 # Side effects:
 #
@@ -346,12 +346,12 @@ _base_label_set () {
 
 # ### Function `_base_label_set_default`
 #
-# This function sets the base label if one was not specified on the
+# This function sets the Base label if one was not specified on the
 # command-line.
 #
 # Arguments:
 #
-# * `LABEL` (string): default base label
+# * `LABEL` (string): default Base label
 #
 # Side effects:
 #
@@ -470,20 +470,20 @@ _base_select_dir () {
 ##############################################################################
 # ## Core Configuration
 #
-# This section configures a base environment.
+# This section configures a Base environment.
 
 # ### Base Directory
 #
-# The full path of the base directory is stored in the `BASE` environment
+# The full path of the Base directory is stored in the `BASE` environment
 # variable.
 BASE="${PWD}"
 
 # ### Base Label
 #
-# If the base label was not specified using a CLI argument, then it defaults
-# to the basename of the base directory.
+# If the Base label was not specified using a CLI argument, then it defaults
+# to the basename of the Base directory.
 #
-# Note that the base label can be changed in user configuration through the
+# Note that the Base label can be changed in user configuration through the
 # label management API.
 if [ -n "${BASE_LABEL_CLI}" ] ; then
   BASE_LABEL="${BASE_LABEL_CLI}"
@@ -544,13 +544,13 @@ _base_var_set "PROMPT_COMMAND" "_base_ps_update"
 
 # ### Function `bcd`
 #
-# This function changes to a directory relative to the base directory.
+# This function changes to a directory relative to the Base directory.
 #
 # This function is called directly from the command line.
 #
 # Arguments:
 #
-# * `DIR` (string): directory relative to the base directory (optional)
+# * `DIR` (string): directory relative to the Base directory (optional)
 #
 # Returns:
 #
@@ -616,7 +616,7 @@ complete -o filenames -F _base_bcd_complete bcd
 
 # ### Function `base_deactivate`
 #
-# This function deactivates a base environment.
+# This function deactivates a Base environment.
 #
 # Side effects:
 #
@@ -658,7 +658,7 @@ base_deactivate () {
 ##############################################################################
 # ## User Configuration
 #
-# Configuration scripts in the base directory are sourced to load any user
+# Configuration scripts in the Base directory are sourced to load any user
 # configuration.  Configuration can be done in any of the following ways:
 #
 # * `.base` can be a Bash script.
@@ -698,11 +698,11 @@ hash -r
 #     * (`NEWENV` when this script is executed normally)
 #     * (`CPYENV` when this script is sourced)
 #     * `CURENV` when `base_activate` is sourced
-# * `BASE` is the base directory path.
-# * `BASE_LABEL` is the base label.
+# * `BASE` is the Base directory path.
+# * `BASE_LABEL` is the Base label.
 # * `BASE_VAR_VARS` is the array of modified environment variables.
 # * `BASE_VAR_EXPORTS` is the array of modified environment variables that
-#   were exported before base configuration.
+#   were exported before Base configuration.
 # * `BASE_DEACTIVATION_CALLBACKS` is the array of deactivation callback
 #   functions.
 #

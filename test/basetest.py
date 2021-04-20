@@ -443,7 +443,7 @@ class TestBase(unittest.TestCase):
         self.assertEqual(self.getPID(), pid_initial)
         self.sendline('source base_activate')
         self.expect_exact(
-            b'\r\nerror: nested bases require a new Bash shell\r\n')
+            b'\r\nerror: nested Bases require a new Bash shell\r\n')
 
     # BASE_VERSION environment variable ######################################
 

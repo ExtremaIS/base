@@ -86,7 +86,7 @@ _base_help() {
 # Environment variables:
 #
 # * `BASE_MODE` is set to `NEWENV`.
-# * `BASE_NEW` is set to indicate that a new base environment is being
+# * `BASE_NEW` is set to indicate that a new Base environment is being
 #   configured.
 # * `BASE_LABEL_CLI` is set to the label arugment when one is given.
 if [ "${BASH_SOURCE[0]}" == "${0}" ] ; then
@@ -114,7 +114,7 @@ if [ "${BASH_SOURCE[0]}" == "${0}" ] ; then
     BASE_NEW=1 \
     bash --init-file "${BASH_SOURCE[0]}"
 
-  echo "error: base unable to execute a new Bash shell" >&2
+  echo "error: Base unable to execute a new Bash shell" >&2
   exit 1
 fi
 
@@ -200,7 +200,7 @@ _base_load_env () {
 # * `BASE_ENV_SER` contains the serialized configuration of the current Bash
 #   shell.  It is passed to the new process.
 # * `BASE_MODE` is set to `CPYENV`.
-# * `BASE_NEW` is set to indicate that a new base environment is being
+# * `BASE_NEW` is set to indicate that a new Base environment is being
 #   configured.
 # * `BASE_LABEL_CLI` is set to the label arugment when one is given.
 if [ -z "${BASE_NEW+x}" ] ; then
@@ -312,7 +312,7 @@ if [ "${BASE_MODE}" = "NEWENV" ] ; then
   fi
 fi
 
-# After this point, the base environment is configured in the new Bash shell.
+# After this point, the Base environment is configured in the new Bash shell.
 # From the above code, only the following environment variables remain set:
 #
 # * `BASE_VERSION`
@@ -381,7 +381,7 @@ _base_lib_set_insert () {
 #
 # The deactivation callback API provides a way to register functions that are
 # called during deactivation.  Deactivation is not necessary when configuring
-# a base environment in a new Bash shell, but configuration scripts must be
+# a Base environment in a new Bash shell, but configuration scripts must be
 # compatible with both `base` and `base_activate`.
 #
 # The deactivation callback API is only available during environment
@@ -407,7 +407,7 @@ _base_deactivation_callback_register () {
 #
 # The variable management API provides a way to save initial environment
 # variable values so that they can be restored during deactivation.
-# Deactivation is not necessary when configuring a base environment in a new
+# Deactivation is not necessary when configuring a Base environment in a new
 # Bash shell, but configuration scripts must be compatible with both `base`
 # and `base_activate`.
 #
@@ -468,18 +468,18 @@ _base_var_unset () {
 ##############################################################################
 # ## Label Management
 #
-# The label management API provides a way to set the base label.
+# The label management API provides a way to set the Base label.
 #
 # The label management API is only available during environment configuration
 # (`NEWENV_3` and `CPYENV_4`).
 
 # ### Function `_base_label_set`
 #
-# This function sets the base label.
+# This function sets the Base label.
 #
 # Arguments:
 #
-# * `LABEL` (string): new base label
+# * `LABEL` (string): new Base label
 #
 # Side effects:
 #
@@ -490,12 +490,12 @@ _base_label_set () {
 
 # ### Function `_base_label_set_default`
 #
-# This function sets the base label if one was not specified on the
+# This function sets the Base label if one was not specified on the
 # command-line.
 #
 # Arguments:
 #
-# * `LABEL` (string): default base label
+# * `LABEL` (string): default Base label
 #
 # Side effects:
 #
@@ -614,20 +614,20 @@ _base_select_dir () {
 ##############################################################################
 # ## Core Configuration
 #
-# This section configures a base environment.
+# This section configures a Base environment.
 
 # ### Base Directory
 #
-# The full path of the base directory is stored in the `BASE` environment
+# The full path of the Base directory is stored in the `BASE` environment
 # variable.
 BASE="${PWD}"
 
 # ### Base Label
 #
-# If the base label was not specified using a CLI argument, then it defaults
-# to the basename of the base directory.
+# If the Base label was not specified using a CLI argument, then it defaults
+# to the basename of the Base directory.
 #
-# Note that the base label can be changed in user configuration through the
+# Note that the Base label can be changed in user configuration through the
 # label management API.
 if [ -n "${BASE_LABEL_CLI}" ] ; then
   BASE_LABEL="${BASE_LABEL_CLI}"
@@ -686,13 +686,13 @@ PROMPT_COMMAND="_base_ps_update"
 
 # ### Function `bcd`
 #
-# This function changes to a directory relative to the base directory.
+# This function changes to a directory relative to the Base directory.
 #
 # This function is called directly from the command line.
 #
 # Arguments:
 #
-# * `DIR` (string): directory relative to the base directory (optional)
+# * `DIR` (string): directory relative to the Base directory (optional)
 #
 # Returns:
 #
@@ -758,7 +758,7 @@ complete -o filenames -F _base_bcd_complete bcd
 
 # ### Function `base_deactivate`
 #
-# This function deactivates a base environment.
+# This function deactivates a Base environment.
 #
 # When using a new Bash shell, deactivation is done by exiting the shell.
 # This can be done using the `exit` command or by calling this function.
@@ -773,7 +773,7 @@ base_deactivate () {
 ##############################################################################
 # ## User Configuration
 #
-# Configuration scripts in the base directory are sourced to load any user
+# Configuration scripts in the Base directory are sourced to load any user
 # configuration.  Configuration can be done in any of the following ways:
 #
 # * `.base` can be a Bash script.
@@ -814,8 +814,8 @@ hash -r
 #     * `NEWENV` when this script is executed normally
 #     * `CPYENV` when this script is sourced
 #     * (`CURENV` when `base_activate` is sourced)
-# * `BASE` is the base directory path.
-# * `BASE_LABEL` is the base label.
+# * `BASE` is the Base directory path.
+# * `BASE_LABEL` is the Base label.
 #
 # The following functions remain set:
 #
