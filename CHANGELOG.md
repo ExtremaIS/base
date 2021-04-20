@@ -1,4 +1,4 @@
-# `base` Changelog
+# Base Changelog
 
 From version 2.0.0, this project uses [Semantic Versioning][SemVer], with
 versions in `A.B.C` format.
@@ -19,7 +19,13 @@ following conventions:
 
 [KaC]: <https://keepachangelog.com/en/1.0.0/>
 
-## Unreleased
+## 2.0.0 (2021-04-20)
+
+### Breaking
+
+* Rewrite `base.sh`, separating `base_deactivate.sh`
+* Rewrite `share` scripts
+* Add automated tests
 
 ## 1.1.2 (2014-03-11)
 
