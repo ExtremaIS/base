@@ -4,14 +4,6 @@
 
 ## Documentation
 
-### README
-
-* Examples
-
-* Alternatives:
-    * [direnv](https://direnv.net/)
-        * <https://github.com/direnv/direnv>
-
 ## Project
 
 ### Packages
