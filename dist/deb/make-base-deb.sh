@@ -80,7 +80,7 @@ sed -i "s/^  \\*.*/  * Release ${base_version}/" changelog
 cd ..
 cp dist/deb/control debian
 cp dist/deb/copyright debian
-cp dist/deb/Makefile .
+cp dist/Makefile .
 dpkg-buildpackage -us -uc
 cd "/tmp"
 rm -rf "${base_dir}"
