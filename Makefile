@@ -8,9 +8,9 @@ MAINTAINER_NAME  = Travis Cardwell
 MAINTAINER_EMAIL = travis.cardwell@extrema.is
 
 DESTDIR     ?=
-PREFIX      ?= $(DESTDIR)/usr/local
-bindir      ?= $(PREFIX)/bin
-datarootdir ?= $(PREFIX)/share
+PREFIX      ?= /usr/local
+bindir      ?= $(DESTDIR)/$(PREFIX)/bin
+datarootdir ?= $(DESTDIR)/$(PREFIX)/share
 sharedir    ?= $(datarootdir)/base
 docdir      ?= $(datarootdir)/doc/base
 man1dir     ?= $(datarootdir)/man/man1
@@ -99,11 +99,6 @@ install: # install everything to PREFIX
 .PHONY: install
 
 install-bin: # install base scripts to PREFIX/bin
-> @test ! -e "$(bindir)/base" || rm -i "$(bindir)/base"
-> @test ! -e "$(bindir)/base" || $(call die,"$(bindir)/base already exists")
-> @test ! -e "$(bindir)/base_activate" || rm -i "$(bindir)/base_activate"
-> @test ! -e "$(bindir)/base_activate" \
->   || $(call die,"$(bindir)/base_activate already exists")
 > @mkdir -p "$(bindir)"
 > @install -m 0755 base.sh "$(bindir)/base"
 > @install -m 0755 base_activate.sh "$(bindir)/base_activate"
