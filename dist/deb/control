@@ -9,5 +9,5 @@ Homepage: https://github.com/ExtremaIS/base#base
 
 Package: base
 Architecture: all
-Depends: bash (>= 4), findutils (>= 4)
+Depends: bash (>= 4), coreutils, findutils
 Description: Configure Bash shell environments relative to a directory
