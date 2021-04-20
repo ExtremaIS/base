@@ -1,7 +1,7 @@
 DESTDIR     ?=
-prefix      ?= $(DESTDIR)/usr
-bindir      ?= $(prefix)/bin
-datarootdir ?= $(prefix)/share
+prefix      ?= /usr
+bindir      ?= $(DESTDIR)/$(prefix)/bin
+datarootdir ?= $(DESTDIR)/$(prefix)/share
 sharedir    ?= $(datarootdir)/base
 docdir      ?= $(datarootdir)/doc/base
 man1dir     ?= $(datarootdir)/man/man1
