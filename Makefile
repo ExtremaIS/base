@@ -160,7 +160,18 @@ recent: # show N most recently modified files
 >   | head -n $(N)
 .PHONY: recent
 
-#rpm: TODO
+rpm: # build .rpm package for VERSION in a Fedora container
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval SRC := "base-$(VERSION).tar.xz")
+> @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
+> @docker run --rm -it \
+>   -e RPMFULLNAME="$(MAINTAINER_NAME)" \
+>   -e RPMEMAIL="$(MAINTAINER_EMAIL)" \
+>   -v $(PWD)/dist/rpm/make-base-rpm.sh:/root/make-base-rpm.sh:ro \
+>   -v $(PWD)/build:/host \
+>   fedora:33 \
+>   /root/make-base-rpm.sh "$(SRC)"
+.PHONY: rpm
 
 shellcheck: hr
 shellcheck: # run shellcheck on all shell scripts
