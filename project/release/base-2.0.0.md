@@ -39,7 +39,7 @@ deactivation.  In this release, the same functionality is implemented as
 follows:
 
 ```
-_base_save_var EXAMPLE foo
+_base_var_set EXAMPLE foo
 ```
 
 Any number of deactivation callback functions can be registered when
