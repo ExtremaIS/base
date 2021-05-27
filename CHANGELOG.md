@@ -21,6 +21,10 @@ following conventions:
 
 ## Unreleased
 
+### Non-Breaking
+
+* Use `docker-pkg` scripts to build packages
+
 ## 2.0.0 (2021-04-20)
 
 ### Breaking

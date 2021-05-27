@@ -58,15 +58,14 @@ clean: # clean package and remove artifacts
 
 deb: # build .deb package for VERSION in a Debian container
 > $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
-> $(eval SRC := "base-$(VERSION).tar.xz")
+> $(eval SRC := "$(PROJECT)-$(VERSION).tar.xz")
 > @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
 > @docker run --rm -it \
 >   -e DEBFULLNAME="$(MAINTAINER_NAME)" \
 >   -e DEBEMAIL="$(MAINTAINER_EMAIL)" \
->   -v $(PWD)/dist/deb/make-base-deb.sh:/root/make-base-deb.sh:ro \
 >   -v $(PWD)/build:/host \
->   debian:buster \
->   /root/make-base-deb.sh "$(SRC)"
+>   extremais/pkg-debian:buster \
+>   /home/docker/bin/make-deb.sh "$(SRC)"
 .PHONY: deb
 
 deb-test: # run a Debian container to test .deb package for VERSION
@@ -162,15 +161,14 @@ recent: # show N most recently modified files
 
 rpm: # build .rpm package for VERSION in a Fedora container
 > $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
-> $(eval SRC := "base-$(VERSION).tar.xz")
+> $(eval SRC := "$(PROJECT)-$(VERSION).tar.xz")
 > @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
 > @docker run --rm -it \
 >   -e RPMFULLNAME="$(MAINTAINER_NAME)" \
 >   -e RPMEMAIL="$(MAINTAINER_EMAIL)" \
->   -v $(PWD)/dist/rpm/make-base-rpm.sh:/root/make-base-rpm.sh:ro \
 >   -v $(PWD)/build:/host \
->   fedora:33 \
->   /root/make-base-rpm.sh "$(SRC)"
+>   extremais/pkg-fedora:34 \
+>   /home/docker/bin/make-rpm.sh "$(SRC)"
 .PHONY: rpm
 
 shellcheck: hr
