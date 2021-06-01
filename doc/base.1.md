@@ -48,7 +48,7 @@ run Base in one of the three following ways:
     shell are propagated.  `${HOME}/.bashrc` is sourced if it exists.
 
 `. base` [*label*]
-:   When you source `base`, the Base enviornment is configured in a new Bash
+:   When you source `base`, the Base environment is configured in a new Bash
     shell, but all environment variables and aliases from the parent shell are
     propagated.
 
@@ -181,7 +181,7 @@ The following functions are available:
 
 `_base_deactivation_callback_register` *function_name*
 :   This registers a function to be evaluated during deactivation.  When
-    using a new Bash shell, deactivation is not neccesary, so the referenced
+    using a new Bash shell, deactivation is not necessary, so the referenced
     function is unset.
 
 `_base_select` *label* *option* `...`

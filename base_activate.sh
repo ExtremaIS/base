@@ -87,7 +87,7 @@ fi
 #
 # Environment variables:
 #
-# * `BASE_LABEL_CLI` is set to the label arugment when one is given.
+# * `BASE_LABEL_CLI` is set to the label argument when one is given.
 # * `BASE_MODE` is set to `CURENV`.
 if [ "$#" -gt "1" ] ; then
   _base_help >&2
