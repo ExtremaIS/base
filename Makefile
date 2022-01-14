@@ -64,7 +64,7 @@ deb: # build .deb package for VERSION in a Debian container
 >   -e DEBFULLNAME="$(MAINTAINER_NAME)" \
 >   -e DEBEMAIL="$(MAINTAINER_EMAIL)" \
 >   -v $(PWD)/build:/host \
->   extremais/pkg-debian:buster \
+>   extremais/pkg-debian:bullseye \
 >   /home/docker/bin/make-deb.sh "$(SRC)"
 .PHONY: deb
 
@@ -74,7 +74,7 @@ deb-test: # run a Debian container to test .deb package for VERSION
 > @test -f build/$(PKG) || $(call die,"build/$(PKG) not found")
 > @docker run --rm -it \
 >   -v $(PWD)/build/$(PKG):/tmp/$(PKG):ro \
->   debian:buster \
+>   debian:bullseye \
 >   /bin/bash
 .PHONY: deb-test
 
