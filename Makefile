@@ -53,6 +53,11 @@ define die
   (echo "error: $(1)" ; false)
 endef
 
+define get_version
+$(shell grep ^BASE_VERSION $(if $(origin 1) == undefined,base.sh,$(1)) \
+        | sed -e 's/^[^"]*"//' -e 's/"$$//')
+endef
+
 ##############################################################################
 # Rules
 
@@ -72,7 +77,7 @@ clean-all: # clean package and remove artifacts
 .PHONY: clean-all
 
 deb: # build .deb package for VERSION in a Debian container
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > $(eval SRC := $(PROJECT)-$(VERSION).tar.xz)
 > @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
 > @docker run --rm -it \
@@ -84,7 +89,7 @@ deb: # build .deb package for VERSION in a Debian container
 .PHONY: deb
 
 deb-test: # run a Debian container to test .deb package for VERSION
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > $(eval PKG := "base_$(VERSION)-1_all.deb")
 > @test -f build/$(PKG) || $(call die,"build/$(PKG) not found")
 > @docker run --rm -it \
@@ -94,7 +99,7 @@ deb-test: # run a Debian container to test .deb package for VERSION
 .PHONY: deb-test
 
 doc: # build script documentation
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > @mkdir -p build
 > @literatex --ignore-shebang \
 >   --input base.sh --output build/base-$(VERSION).md
@@ -174,7 +179,7 @@ lint: # run shellcheck, pycodestyle, and pylint
 .PHONY: lint
 
 man: # build man page
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > $(eval DATE := $(shell date --rfc-3339=date))
 > @pandoc -s -t man -o doc/base.1 \
 >   --variable header="Base Manual" \
@@ -206,7 +211,7 @@ recent: # show N most recently modified files
 .PHONY: recent
 
 rpm: # build .rpm package for VERSION in a Fedora container
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > $(eval SRC := $(PROJECT)-$(VERSION).tar.xz)
 > @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
 > @docker run --rm -it \
@@ -218,7 +223,7 @@ rpm: # build .rpm package for VERSION in a Fedora container
 .PHONY: rpm
 
 rpm-test: # run a Fedora container to test .rpm package for VERSION
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > $(eval PKG := "base-$(VERSION)-1.$(TEST_RPM_OS).noarch.rpm")
 > @test -f build/$(PKG) || $(call die,"build/$(PKG) not found")
 > @docker run --rm -it \
@@ -247,7 +252,7 @@ source-git: # create source tarball of git TREE
     | wc -l))
 > @test "$(UNTRACKED)" = "0" \
 >   || echo "WARNING: Not including untracked files!" >&2
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > @mkdir -p build
 > @git archive --format=tar --prefix=$(PROJECT)-$(VERSION)/ $(TREE) \
 >   | xz \
@@ -263,7 +268,7 @@ source-tar: # create source tarball using tar
     | wc -l))
 > @test "$(UNTRACKED)" = "0" \
 >   || echo "WARNING: Including untracked files!" >&2
-> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval VERSION := $(call get_version))
 > @mkdir -p build
 > @sed -e 's,^/,./,' -e 's,/$$,,' .gitignore > build/.gitignore
 > @tar \
@@ -330,5 +335,6 @@ todo: # search for TODO items
 .PHONY: todo
 
 version: # show current version
-> @./base.sh --version
+> @echo "base.sh          $(call get_version, base.sh)"
+> @echo "base_activate.sh $(call get_version, base_activate.sh)"
 .PHONY: version
