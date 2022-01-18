@@ -78,7 +78,24 @@ deb-test: # run a Debian container to test .deb package for VERSION
 >   /bin/bash
 .PHONY: deb-test
 
-#doc: TODO
+doc: # build script documentation
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> @mkdir -p build
+> @literatex --ignore-shebang \
+>   --input base.sh --output build/base-$(VERSION).md
+> @pandoc \
+>   --from markdown --to html5 --standalone \
+>   --metadata title="base $(VERSION)" \
+>   --output build/base-$(VERSION).html \
+>   build/base-$(VERSION).md
+> @literatex --ignore-shebang \
+>   --input base_activate.sh --output build/base_activate-$(VERSION).md
+> @pandoc \
+>   --from markdown --to html5 --standalone \
+>   --metadata title="base $(VERSION)" \
+>   --output build/base_activate-$(VERSION).html \
+>   build/base_activate-$(VERSION).md
+.PHONY: doc
 
 help: # show this help
 > @grep '^[a-zA-Z0-9._-]\+:[^#]*# ' $(MAKEFILE_LIST) \
