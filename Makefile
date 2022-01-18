@@ -121,6 +121,10 @@ hr: #internal# display a horizontal rule
 > @command -v hr >/dev/null 2>&1 && hr -t || true
 .PHONY: hr
 
+ignored: # list files ignored by git
+> @git ls-files . --ignored --exclude-standard --others
+.PHONY: ignored
+
 install: install-bin
 install: install-share
 install: install-man
