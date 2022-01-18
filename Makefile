@@ -1,19 +1,20 @@
 ##############################################################################
 # Project configuration
 
-PROJECT      := base
-DOCKER_IMAGE := extremais/basetest
+PROJECT        := base
+TEST_CONTAINER := extremais/basetest
 
-MAINTAINER_NAME  = Travis Cardwell
-MAINTAINER_EMAIL = travis.cardwell@extrema.is
+DESTDIR ?=
+PREFIX  ?= /usr/local
 
-DESTDIR     ?=
-PREFIX      ?= /usr/local
-bindir      ?= $(DESTDIR)/$(PREFIX)/bin
-datarootdir ?= $(DESTDIR)/$(PREFIX)/share
-sharedir    ?= $(datarootdir)/base
-docdir      ?= $(datarootdir)/doc/base
-man1dir     ?= $(datarootdir)/man/man1
+DEB_CONTAINER    ?= extremais/pkg-debian:bullseye
+RPM_CONTAINER    ?= extremais/pkg-fedora:34
+MAINTAINER_NAME  ?= Travis Cardwell
+MAINTAINER_EMAIL ?= travis.cardwell@extrema.is
+
+TEST_DEB_CONTAINER ?= debian:bullseye
+TEST_RPM_CONTAINER ?= fedora:34
+TEST_RPM_OS        ?= fc34
 
 ##############################################################################
 # Make configuration
@@ -30,6 +31,12 @@ MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --warn-undefined-variables
 
 .DEFAULT_GOAL := help
+
+BINDIR      := $(DESTDIR)$(PREFIX)/bin
+DATAROOTDIR := $(DESTDIR)$(PREFIX)/share
+SHAREDIR    := $(DATAROOTDIR)/base
+DOCDIR      := $(DATAROOTDIR)/doc/base
+MAN1DIR     := $(DATAROOTDIR)/man/man1
 
 ##############################################################################
 # Functions
@@ -72,7 +79,7 @@ deb: # build .deb package for VERSION in a Debian container
 >   -e DEBFULLNAME="$(MAINTAINER_NAME)" \
 >   -e DEBEMAIL="$(MAINTAINER_EMAIL)" \
 >   -v $(PWD)/build:/host \
->   extremais/pkg-debian:bullseye \
+>   $(DEB_CONTAINER) \
 >   /home/docker/bin/make-deb.sh "$(SRC)"
 .PHONY: deb
 
@@ -82,7 +89,7 @@ deb-test: # run a Debian container to test .deb package for VERSION
 > @test -f build/$(PKG) || $(call die,"build/$(PKG) not found")
 > @docker run --rm -it \
 >   -v $(PWD)/build/$(PKG):/tmp/$(PKG):ro \
->   debian:bullseye \
+>   $(TEST_DEB_CONTAINER) \
 >   /bin/bash
 .PHONY: deb-test
 
@@ -129,30 +136,34 @@ install: install-bin
 install: install-share
 install: install-man
 install: install-doc
-install: # install everything to PREFIX
+install: # install everything
 .PHONY: install
 
-install-bin: # install base scripts to PREFIX/bin
-> @mkdir -p "$(bindir)"
-> @install -m 0755 base.sh "$(bindir)/base"
-> @install -m 0755 base_activate.sh "$(bindir)/base_activate"
+install-bin: # install scripts
+> @mkdir -p "$(BINDIR)"
+> @install -m 0755 base.sh "$(BINDIR)/base"
+> @install -m 0755 base_activate.sh "$(BINDIR)/base_activate"
 .PHONY: install-bin
 
-install-doc: # install documentation to PREFIX/share/doc/base"
-> @mkdir -p "$(docdir)"
-> @install -m 0644 -T <(gzip -c README.md) "$(docdir)/README.md.gz"
-> @install -m 0644 -T <(gzip -c CHANGELOG.md) "$(docdir)/changelog.gz"
-> @install -m 0644 -T <(gzip -c LICENSE) "$(docdir)/LICENSE.gz"
+install-doc: # install documentation
+> @mkdir -p "$(DOCDIR)"
+> @install -m 0644 README.md "$(DOCDIR)"
+> @gzip "$(DOCDIR)/README.md"
+> @install -m 0644 -T CHANGELOG.md "$(DOCDIR)/changelog"
+> @gzip "$(DOCDIR)/changelog"
+> @install -m 0644 LICENSE "$(DOCDIR)"
+> @gzip "$(DOCDIR)/LICENSE"
 .PHONY: install-doc
 
-install-man: # install manual to PREFIX/share/man/man1
-> @mkdir -p "$(man1dir)"
-> @install -m 0644 -T <(gzip -c doc/base.1) "$(man1dir)/base.1.gz"
+install-man: # install man page
+> @mkdir -p "$(MAN1DIR)"
+> @install -m 0644 doc/base.1 "$(MAN1DIR)"
+> @gzip "$(MAN1DIR)/base.1"
 .PHONY: install-man
 
-install-share: # install share scripts to PREFIX/share/base
-> @mkdir -p "$(sharedir)"
-> @install -m 0644 share/* "$(sharedir)"
+install-share: # install share scripts
+> @mkdir -p "$(SHAREDIR)"
+> @install -m 0644 share/* "$(SHAREDIR)"
 .PHONY: install-share
 
 lint: hr
@@ -205,6 +216,16 @@ rpm: # build .rpm package for VERSION in a Fedora container
 >   extremais/pkg-fedora:34 \
 >   /home/docker/bin/make-rpm.sh "$(SRC)"
 .PHONY: rpm
+
+rpm-test: # run a Fedora container to test .rpm package for VERSION
+> $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
+> $(eval PKG := "base-$(VERSION)-1.$(TEST_RPM_OS).noarch.rpm")
+> @test -f build/$(PKG) || $(call die,"build/$(PKG) not found")
+> @docker run --rm -it \
+>   -v $(PWD)/build/$(PKG):/tmp/$(PKG):ro \
+>   $(TEST_RPM_CONTAINER) \
+>   /bin/bash
+.PHONY: rpm-test
 
 shellcheck: hr
 shellcheck: # run shellcheck on all shell scripts
@@ -265,7 +286,7 @@ test: # run all tests or test T in test container
 >       -v "$(PWD)/base_activate.sh:/usr/bin/base_activate:ro" \
 >       -v "$(PWD)/share:/usr/share/base:ro" \
 >       -v "$(PWD)/test/basetest.py:/home/docker/basetest:ro" \
->       "$(DOCKER_IMAGE):latest" \
+>       "$(TEST_CONTAINER):latest" \
 >       /home/docker/basetest \
 >   || docker run --rm -it \
 >       --hostname "basetest" \
@@ -273,15 +294,15 @@ test: # run all tests or test T in test container
 >       -v "$(PWD)/base_activate.sh:/usr/bin/base_activate:ro" \
 >       -v "$(PWD)/share:/usr/share/base:ro" \
 >       -v "$(PWD)/test/basetest.py:/home/docker/basetest:ro" \
->       "$(DOCKER_IMAGE):latest" \
+>       "$(TEST_CONTAINER):latest" \
 >       /home/docker/basetest "TestBase.$(T)"
 .PHONY: test
 
 test-image: # build test image
-> $(eval EXISTS := $(shell docker images --quiet $(DOCKER_IMAGE):latest))
+> $(eval EXISTS := $(shell docker images --quiet $(TEST_CONTAINER):latest))
 > @test -n "$(EXISTS)" || docker build \
 >   --build-arg "TERM=${TERM}" \
->   --tag "$(DOCKER_IMAGE):latest" \
+>   --tag "$(TEST_CONTAINER):latest" \
 >   test
 .PHONY: test-image
 
@@ -293,7 +314,7 @@ test-shell: # run shell in test container
 >   -v "$(PWD)/base_activate.sh:/usr/bin/base_activate:ro" \
 >   -v "$(PWD)/share:/usr/share/base:ro" \
 >   -v "$(PWD)/test/basetest.py:/home/docker/basetest:ro" \
->   "$(DOCKER_IMAGE):latest" \
+>   "$(TEST_CONTAINER):latest" \
 >   /bin/bash
 .PHONY: test-shell
 
