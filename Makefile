@@ -34,8 +34,8 @@ MAKEFLAGS += --warn-undefined-variables
 
 BINDIR      := $(DESTDIR)$(PREFIX)/bin
 DATAROOTDIR := $(DESTDIR)$(PREFIX)/share
-SHAREDIR    := $(DATAROOTDIR)/base
-DOCDIR      := $(DATAROOTDIR)/doc/base
+SHAREDIR    := $(DATAROOTDIR)/$(PROJECT)
+DOCDIR      := $(DATAROOTDIR)/doc/$(PROJECT)
 MAN1DIR     := $(DATAROOTDIR)/man/man1
 
 ##############################################################################
@@ -73,7 +73,7 @@ clean-all: # clean package and remove artifacts
 
 deb: # build .deb package for VERSION in a Debian container
 > $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
-> $(eval SRC := "$(PROJECT)-$(VERSION).tar.xz")
+> $(eval SRC := $(PROJECT)-$(VERSION).tar.xz)
 > @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
 > @docker run --rm -it \
 >   -e DEBFULLNAME="$(MAINTAINER_NAME)" \
@@ -119,7 +119,7 @@ grep: # grep all non-hidden files for expression E
 .PHONY: grep
 
 help: # show this help
-> @grep '^[a-zA-Z0-9._-]\+:[^#]*# ' $(MAKEFILE_LIST) \
+> @grep '^[a-zA-Z0-9_-]\+:[^#]*# ' $(MAKEFILE_LIST) \
 >   | sed 's/^\([^:]\+\):[^#]*# \(.*\)/make \1\t\2/' \
 >   | column -t -s $$'\t'
 .PHONY: help
@@ -207,13 +207,13 @@ recent: # show N most recently modified files
 
 rpm: # build .rpm package for VERSION in a Fedora container
 > $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
-> $(eval SRC := "$(PROJECT)-$(VERSION).tar.xz")
+> $(eval SRC := $(PROJECT)-$(VERSION).tar.xz)
 > @test -f build/$(SRC) || $(call die,"build/$(SRC) not found")
 > @docker run --rm -it \
 >   -e RPMFULLNAME="$(MAINTAINER_NAME)" \
 >   -e RPMEMAIL="$(MAINTAINER_EMAIL)" \
 >   -v $(PWD)/build:/host \
->   extremais/pkg-fedora:34 \
+>   $(RPM_CONTAINER) \
 >   /home/docker/bin/make-rpm.sh "$(SRC)"
 .PHONY: rpm
 
