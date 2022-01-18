@@ -52,9 +52,13 @@ checksums: # calculate checksums of build artifacts
 > @cd build && $(call checksum_files) | xargs sha512sum > SHA512SUMS
 .PHONY: checksums
 
-clean: # clean package and remove artifacts
-> @rm -rf build
+clean: # clean package
 .PHONY: clean
+
+clean-all: clean
+clean-all: # clean package and remove artifacts
+> @rm -rf build
+.PHONY: clean-all
 
 deb: # build .deb package for VERSION in a Debian container
 > $(eval VERSION := $(shell ./base.sh --version | sed 's/base //'))
