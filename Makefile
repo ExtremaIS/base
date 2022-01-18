@@ -34,6 +34,10 @@ MAKEFLAGS += --warn-undefined-variables
 ##############################################################################
 # Functions
 
+define all_files
+  find . -not -path '*/\.*' -type f
+endef
+
 define checksum_files
   find . -maxdepth 1 -type f -not -path './*SUMS' | sed 's,^\./,,' | sort
 endef
@@ -100,6 +104,12 @@ doc: # build script documentation
 >   --output build/base_activate-$(VERSION).html \
 >   build/base_activate-$(VERSION).md
 .PHONY: doc
+
+grep: # grep all non-hidden files for expression E
+> $(eval E:= "")
+> @test -n "$(E)" || $(call die,"usage: make grep E=expression")
+> @$(call all_files) | xargs grep -Hn '$(E)' || true
+.PHONY: grep
 
 help: # show this help
 > @grep '^[a-zA-Z0-9._-]\+:[^#]*# ' $(MAKEFILE_LIST) \
