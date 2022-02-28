@@ -47,7 +47,7 @@
 #
 # The following variable sets the version.  This variable is available through
 # all of the stages.
-BASE_VERSION="2.0.0"
+BASE_VERSION="2.0.1"
 
 ##############################################################################
 # ## Process Management
@@ -88,7 +88,7 @@ _base_help() {
 # * `BASE_MODE` is set to `NEWENV`.
 # * `BASE_NEW` is set to indicate that a new Base environment is being
 #   configured.
-# * `BASE_LABEL_CLI` is set to the label arugment when one is given.
+# * `BASE_LABEL_CLI` is set to the label argument when one is given.
 if [ "${BASH_SOURCE[0]}" == "${0}" ] ; then
   if [ "$#" -gt "1" ] ; then
     _base_help >&2
@@ -202,7 +202,7 @@ _base_load_env () {
 # * `BASE_MODE` is set to `CPYENV`.
 # * `BASE_NEW` is set to indicate that a new Base environment is being
 #   configured.
-# * `BASE_LABEL_CLI` is set to the label arugment when one is given.
+# * `BASE_LABEL_CLI` is set to the label argument when one is given.
 if [ -z "${BASE_NEW+x}" ] ; then
   if [ "$#" -gt "1" ] ; then
     _base_help >&2

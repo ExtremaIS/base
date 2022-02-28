@@ -1,11 +1,15 @@
 # Base
 
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
 Base configures Bash shell environments relative to a directory.  It
 provides an easy and consistent way to load the configuration for diverse
 projects.
 
 * [Overview](#overview)
 * [Installation](#installation)
+    * [`.deb` Package Installation](#deb-package-installation)
+    * [`.rpm` Package Installation](#rpm-package-installation)
     * [Installation From Source](#installation-from-source)
 * [Usage](#usage)
     * [Example Usage](#example-usage)
@@ -14,7 +18,7 @@ projects.
     * [Automatic Configuration](#automatic-configuration)
 * [Project](#project)
     * [Links](#links)
-    * [Releases](#releases)
+    * [Tags](#tags)
     * [Contribution](#contribution)
     * [License](#license)
 
@@ -45,6 +49,16 @@ provides the following benefits:
 ## Installation
 
 Base only runs in the Bash shell.  It has only been tested on Linux.
+
+### `.deb` Package Installation
+
+Check the [Releases][] page for `.deb` packages.
+
+[Releases]: <https://github.com/ExtremaIS/base/releases>
+
+### `.rpm` Package Installation
+
+Check the [Releases][] page for `.rpm` packages.
 
 ### Installation From Source
 
@@ -158,7 +172,7 @@ Here are some of the most popular ones:
 
 * GitHub: <https://github.com/ExtremaIS/base>
 
-### Releases
+### Tags
 
 All releases are tagged in the `main` branch.  Release tags are signed using
 the

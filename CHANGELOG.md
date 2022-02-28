@@ -19,6 +19,12 @@ following conventions:
 
 [KaC]: <https://keepachangelog.com/en/1.0.0/>
 
+## 2.0.1 (2022-02-28)
+
+### Non-Breaking
+
+* Use `docker-pkg` scripts to build packages
+
 ## 2.0.0 (2021-04-20)
 
 ### Breaking

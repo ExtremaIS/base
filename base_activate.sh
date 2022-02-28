@@ -28,7 +28,7 @@
 #
 # The following variable sets the version.  This variable is available through
 # all of the stages.
-BASE_VERSION="2.0.0"
+BASE_VERSION="2.0.1"
 
 ##############################################################################
 # ## Process Management
@@ -87,7 +87,7 @@ fi
 #
 # Environment variables:
 #
-# * `BASE_LABEL_CLI` is set to the label arugment when one is given.
+# * `BASE_LABEL_CLI` is set to the label argument when one is given.
 # * `BASE_MODE` is set to `CURENV`.
 if [ "$#" -gt "1" ] ; then
   _base_help >&2
