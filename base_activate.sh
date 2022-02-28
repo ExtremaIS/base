@@ -28,7 +28,7 @@
 #
 # The following variable sets the version.  This variable is available through
 # all of the stages.
-BASE_VERSION="2.0.0"
+BASE_VERSION="2.0.1"
 
 ##############################################################################
 # ## Process Management
