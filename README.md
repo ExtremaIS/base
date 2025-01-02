@@ -156,6 +156,8 @@ Here are some of the most popular ones:
 * [direnv](https://direnv.net/) - Shell scripts in the current and parent
   directories that are explicitly authorized are sourced.  It supports many
   shells.
+* [mise](https://github.com/jdx/mise) - This project also manages development
+  tools and tasks.
 * [autoenv](https://github.com/inishchith/autoenv) - Shell scripts in the
   current and parent directories are sourced.  It supports many shells.
 * [OnDir](https://github.com/alecthomas/ondir) - Shell scripts are saved in a
