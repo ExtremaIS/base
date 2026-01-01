@@ -217,7 +217,7 @@ Reporting issues:
     Email: <bugs@extrema.is>
 
 Copyright:
-:   Copyright (c) 2011-2025 Travis Cardwell
+:   Copyright (c) 2011-2026 Travis Cardwell
 
 License:
 :   The MIT License <https://opensource.org/licenses/MIT>
